@@ -1,0 +1,9 @@
+{% comment %} templates/home.html {% endcomment %}
+
+{% if user.is_authenticated %}
+    <h1>Welcome, {{ user.username }}!</h1>
+    <a href="{% url 'file_list' %}">Go to your files</a>
+{% else %}
+    <h1>Welcome to the Cloud Storage App</h1>
+    <a href="{% url 'login' %}">Login</a> | <a href="{% url 'signup' %}">Sign up</a>
+{% endif %}

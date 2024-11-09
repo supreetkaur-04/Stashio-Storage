@@ -1,0 +1,21 @@
+<!-- storage/templates/file_list.html -->
+ 
+{% load filters %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Your Files</title>
+</head>
+<body>
+    <h1>Your Files</h1>
+    <h2>Total Storage Used: {{ storage_used|filesizeformat }}</h2>
+    <a href="{% url 'upload_file' %}">Upload a new file</a>
+    <ul>
+        {% for file in files %}
+            <li>{{ file.name }} ({{ file.size|filesizeformat }}) - Uploaded at {{ file.uploaded_at }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
+

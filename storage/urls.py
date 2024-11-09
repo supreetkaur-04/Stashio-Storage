@@ -1,0 +1,18 @@
+# storage/urls.py
+
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.home, name='home'),
+    path('register/', views.register, name='register'),
+    path('login/', views.login_view, name='login'),
+    path('logout/', views.logout_view, name='logout'),
+    path('files/', views.file_list, name='file_list'),
+    path('upload/', views.upload_file, name='upload_file'),
+    path('files/<int:file_id>/download/', views.file_download, name='file_download'),
+    path('folders/<int:folder_id>/', views.folder_view, name='folder_view'),
+    path('folders/create/', views.create_folder, name='create_folder'),
+    path('files/<int:file_id>/delete/', views.delete_file, name='delete_file'),
+]
+
