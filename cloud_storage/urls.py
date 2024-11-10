@@ -21,11 +21,8 @@ from django.urls import path, include
 from . import views
 
 urlpatterns = [
-    path('auth/', include('storage.urls', namespace='myapp')),
-    path('', views.home, name='home'),  # Home page
-    path('signup/', views.signup, name='signup'),
+    path('auth/', include('storage.urls')), 
+    path('', views.home, name='home'), 
     path('admin/', admin.site.urls),
-    path('accounts/', include('django.contrib.auth.urls')),  # Handles login, logout, etc.
-    path('', include('storage.urls')),  # Include your app's URLs
 ]
 
