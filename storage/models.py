@@ -5,7 +5,6 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db.models import Sum
 from django import forms
-from .models import File
 
 ALLOWED_EXTENSIONS = ['pdf', 'jpg', 'jpeg', 'png', 'txt', 'doc', 'docx', 'xls', 'xlsx']
 
@@ -29,7 +28,6 @@ class FileUploadForm(forms.ModelForm):
         
         return file
 
-# Folder model for cloud storage
 class Folder(models.Model):
     name = models.CharField(max_length=255)
     parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE)
@@ -42,13 +40,12 @@ class Folder(models.Model):
     def __str__(self):
         return self.name
 
-# File model for uploaded files
 class File(models.Model):
     name = models.CharField(max_length=255)
     file = models.FileField(upload_to='files/')
     size = models.IntegerField(null=False)  # Ensure size is always set
     uploaded_at = models.DateTimeField(auto_now_add=True)
-    folder = models.ForeignKey(Folder, null=True, blank=True, on_delete=models.SET_NULL)
+    folder = models.ForeignKey('Folder', null=True, blank=True, on_delete=models.SET_NULL)  # Reference 'Folder' as a string
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def save(self, *args, **kwargs):
