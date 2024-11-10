@@ -6,6 +6,9 @@ from django.http import FileResponse
 from .forms import FolderForm, FileUploadForm
 from .models import Folder, File, get_user_storage_usage
 
+def home(request):
+    return render(request, 'home.html') 
+
 def home_view(request):
     return render(request, 'home.html')  # Or whatever template you're using
 
@@ -132,3 +135,14 @@ def logged_out_view(request):
     
     # Render the logged-out page (could be a template with a message)
     return render(request, 'logged_out.html')
+
+def signup(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login')  # Redirect to login after successful signup
+    else:
+        form = UserCreationForm()
+
+    return render(request, 'signup.html', {'form': form})
