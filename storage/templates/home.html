@@ -5,6 +5,7 @@
     <a href="{% url 'file_list' %}">Go to your files</a>  <!-- Link to file list or dashboard -->
 {% else %}
     <h1>Welcome to the Cloud Storage App</h1>
-    <a href="{% url 'login' %}">Login</a> | <a href="{% url 'signup' %}">Sign up</a> <!-- Links for login and signup -->
+    <a href="{% url 'login' %}">Login</a> | <a href="{% url 'storage:signup' %}">Sign up</a>
+    <!-- Links for login and signup -->
 {% endif %}
 
