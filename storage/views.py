@@ -6,9 +6,8 @@ from django.http import FileResponse
 from .forms import FolderForm, FileUploadForm
 from .models import Folder, File, get_user_storage_usage
 
-
-def home(request):
-    return render(request, 'home.html')
+def home_view(request):
+    return render(request, 'home.html')  # Or whatever template you're using
 
 # Registration view
 def register(request):
@@ -99,5 +98,37 @@ def file_list(request):
         files = File.objects.filter(user=request.user, name__icontains=query)
     else:
         return redirect('login') 
-
     return render(request, 'storage/file_list.html', {'files': files, 'query': query})
+
+# storage/views.py
+from django.shortcuts import render, redirect
+from .forms import SignupForm
+from django.contrib.auth.models import User
+from django.contrib.auth import login
+
+def signup_view(request):
+    if request.method == 'POST':
+        form = SignupForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            
+            # Create the user
+            user = User.objects.create_user(username=username, password=password)
+            login(request, user)  # Log the user in after signup
+            
+            return redirect('file_list')  # Redirect to a page after successful signup
+    else:
+        form = SignupForm()
+
+    return render(request, 'signup.html', {'form': form})
+
+def signup_view(request):
+    return render(request, 'signup.html') 
+
+def logged_out_view(request):
+    # Optionally, log out the user if you haven't already done so
+    logout(request)
+    
+    # Render the logged-out page (could be a template with a message)
+    return render(request, 'logged_out.html')

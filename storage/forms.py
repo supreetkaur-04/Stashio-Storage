@@ -2,6 +2,11 @@
 
 from django import forms
 from .models import File, Folder
+from django.contrib.auth.models import User
+
+class SignupForm(forms.Form):
+    username = forms.CharField(max_length=150)
+    password = forms.CharField(widget=forms.PasswordInput())
 
 class FileUploadForm(forms.ModelForm):
     class Meta:
