@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 from dotenv import load_dotenv
+from pathlib import WindowsPath
 import os
 
 load_dotenv()
@@ -63,9 +64,7 @@ ROOT_URLCONF = 'cloud_storage.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [
-            os.path.join(BASE_DIR, 'storage', 'templates'),  # Ensure this path is correct
-        ],
+        'DIRS': [WindowsPath('C:/Users/supre/cloud_storage/storage/templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

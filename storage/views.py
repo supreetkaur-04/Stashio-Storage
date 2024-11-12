@@ -5,6 +5,14 @@ from django.http import HttpResponse, HttpResponseForbidden
 from django.http import FileResponse
 from .forms import FolderForm, FileUploadForm
 from .models import Folder, File, get_user_storage_usage
+from django.views.generic import ListView
+from .models import File
+from django.shortcuts import render, redirect
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib import messages
+from django.shortcuts import render, redirect
+from .forms import SignupForm
+from django.contrib.auth.models import User
 
 def home(request):
     return render(request, 'home.html') 
@@ -101,13 +109,7 @@ def file_list(request):
         files = File.objects.filter(user=request.user, name__icontains=query)
     else:
         return redirect('login') 
-    return render(request, 'storage/file_list.html', {'files': files, 'query': query})
-
-# storage/views.py
-from django.shortcuts import render, redirect
-from .forms import SignupForm
-from django.contrib.auth.models import User
-from django.contrib.auth import login
+    return render(request, 'file_list.html', {'files': files, 'query': query})
 
 def signup_view(request):
     if request.method == 'POST':
@@ -141,8 +143,16 @@ def signup(request):
         form = UserCreationForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('login')  # Redirect to login after successful signup
+            messages.success(request, 'Your account has been created successfully!')
+            return redirect('login')  # Redirect to login page after successful signup
+        else:
+            messages.error(request, 'There was an error with your signup. Please try again.')
     else:
         form = UserCreationForm()
 
     return render(request, 'signup.html', {'form': form})
+
+class FileListView(ListView):
+    model = File
+    template_name = 'file_list.html'  # Specify the template you want to render
+    context_object_name = 'files'

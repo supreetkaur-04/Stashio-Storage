@@ -11,7 +11,7 @@ ALLOWED_EXTENSIONS = ['pdf', 'jpg', 'jpeg', 'png', 'txt', 'doc', 'docx', 'xls', 
 class File(models.Model):
     name = models.CharField(max_length=255)
     file = models.FileField(upload_to='files/')
-    size = models.IntegerField(null=False)  # Ensure size is always set
+    size = models.IntegerField(null=False)
     uploaded_at = models.DateTimeField(auto_now_add=True)
     folder = models.ForeignKey('Folder', null=True, blank=True, on_delete=models.SET_NULL)  # Reference 'Folder' as a string
     user = models.ForeignKey(User, on_delete=models.CASCADE)
