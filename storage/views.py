@@ -20,9 +20,9 @@ def register(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            login(request, user)
-            return redirect('file_list')
+            user = form.save()  
+            login(request, user)  
+            return redirect('file_list')  
     else:
         form = UserCreationForm()
     return render(request, 'register.html', {'form': form})
@@ -39,16 +39,19 @@ def login_view(request):
     return render(request, 'login.html', {'form': form})
 
 def upload_file(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
     if request.method == 'POST':
         form = FileUploadForm(request.POST, request.FILES)
         if form.is_valid():
             file = form.save(commit=False)
-            file.user = request.user  
+            file.user = request.user 
             file.save()
             return redirect('file_list')
     else:
         form = FileUploadForm()
     return render(request, 'upload_file.html', {'form': form})
+
 
 def folder_view(request, folder_id):
     folder = get_object_or_404(Folder, id=folder_id, user=request.user)  
@@ -89,26 +92,27 @@ def file_list(request):
     query = request.GET.get('q', '')
     if request.user.is_authenticated:
         files = File.objects.filter(user=request.user, name__icontains=query)
+        print(files)
     else:
         return redirect('login') 
     return render(request, 'file_list.html', {'files': files, 'query': query})
 
-def signup_view(request):
-    if request.method == 'POST':
-        form = SignupForm(request.POST)
-        if form.is_valid():
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
-            user = User.objects.create_user(username=username, password=password)
-            login(request, user)  
-            return redirect('file_list') 
-    else:
-        form = SignupForm()
+# def signup_view(request):
+#     if request.method == 'POST':
+#         form = SignupForm(request.POST)
+#         if form.is_valid():
+#             username = form.cleaned_data['username']
+#             password = form.cleaned_data['password']
+#             user = User.objects.create_user(username=username, password=password)
+#             login(request, user)  
+#             return redirect('file_list') 
+#     else:
+#         form = SignupForm()
 
-    return render(request, 'signup.html', {'form': form})
+#     return render(request, 'signup.html', {'form': form})
 
-def signup_view(request):
-    return render(request, 'signup.html') 
+# def signup_view(request):
+#     return render(request, 'signup.html') 
 
 def logged_out_view(request):
     logout(request)
