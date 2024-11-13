@@ -1,19 +1,23 @@
+{% comment %} templates/base.html {% endcomment %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}My Website{% endblock %}</title>
+    <title>{% block title %}My Site{% endblock %}</title>
 </head>
 <body>
     <header>
-        <h1>Welcome to My Website</h1>
+        <h1>Welcome to My Site</h1>
     </header>
-    <div>
+
+    <main>
         {% block content %}{% endblock %}
-    </div>
+    </main>
+    
     <footer>
-        <p>&copy; 2024 My Website</p>
+        <p>&copy; 2024 My Site</p>
     </footer>
 </body>
 </html>

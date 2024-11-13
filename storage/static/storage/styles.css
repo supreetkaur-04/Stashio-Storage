@@ -1,0 +1,56 @@
+/* static/storage/styles.css */
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+}
+
+header {
+    background-color: #0044cc;
+    color: white;
+    padding: 10px 20px;
+}
+
+footer {
+    background-color: #0044cc;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+}
+
+h1, h2 {
+    color: #333;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    margin: 5px 0;
+}
+
+form {
+    margin: 20px 0;
+}
+
+button {
+    background-color: #0044cc;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #003399;
+}
+
+.errors {
+    color: red;
+    background-color: #f8d7da;
+    padding: 10px;
+}

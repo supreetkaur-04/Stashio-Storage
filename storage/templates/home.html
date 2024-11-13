@@ -1,11 +1,14 @@
+{% extends "base.html" %}
+
 {% comment %} templates/home.html {% endcomment %}
 
-{% if user.is_authenticated %}
+{% block content %}
+  {% if user.is_authenticated %}
     <h1>Welcome, {{ user.username }}!</h1>
     <a href="{% url 'storage:file_list' %}">Go to your files</a>
-{% else %}
+  {% else %}
     <h1>Welcome to the Cloud Storage App</h1>
     <a href="{% url 'login' %}">Login</a> | <a href="{% url 'storage:signup' %}">Sign up</a>
-    <!-- Links for login and signup -->
-{% endif %}
+  {% endif %}
+{% endblock %}
 
