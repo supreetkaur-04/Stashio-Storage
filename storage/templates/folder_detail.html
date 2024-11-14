@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ folder.name }}</title>
+</head>
+<body>
+    <h1>Folder: {{ folder.name }}</h1>
+    <p>Description: {{ folder.description }}</p>  <!-- Example of displaying description -->
+    
+    <h2>Subfolders ({{ num_subfolders }})</h2>
+    <ul>
+        {% for subfolder in subfolders %}
+            <li><a href="{% url 'folder_detail' subfolder.id %}">{{ subfolder.name }}</a></li>
+        {% empty %}
+            <li>No subfolders available.</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Files ({{ num_files }})</h2>
+    <ul>
+        {% for file in files %}
+            <li><a href="{{ file.get_absolute_url }}">{{ file.name }}</a> - {{ file.size }} KB</li>
+        {% empty %}
+            <li>No files in this folder.</li>
+        {% endfor %}
+    </ul>
+
+    <p><a href="{% url 'folder_list' %}">Back to folder list</a></p>
+</body>
+</html>

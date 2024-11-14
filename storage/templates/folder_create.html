@@ -1,0 +1,40 @@
+{% comment %} templates/folder_create.html {% endcomment %}
+
+{% load static %}  
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Folder</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>Create a New Folder</h1>
+        
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="id_name">Folder Name:</label>
+                {{ form.name }}  <!-- Corrected field name -->
+                {% if form.name.errors %}
+                    <ul class="error-list">
+                        {% for error in form.name.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Create Folder</button>
+            </div>
+        </form>
+        
+
+        <p>
+            <a href="{% url 'storage:file_list' %}">Back to file list</a>
+        </p>
+    </div>
+</body>
+</html>

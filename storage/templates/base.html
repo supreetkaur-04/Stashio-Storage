@@ -1,3 +1,5 @@
+{% load static %}
+
 {% comment %} templates/base.html {% endcomment %}
 
 <!DOCTYPE html>
@@ -5,19 +7,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}My Site{% endblock %}</title>
+    <title>{% block title %}Cloud Storage{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
 </head>
 <body>
-    <header>
-        <h1>Welcome to My Site</h1>
-    </header>
+    <!-- Navbar starts here -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <!-- Hamburger Icon for Mobile -->
+            <div class="hamburger" onclick="toggleMenu()">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
 
+            <!-- Logo/Brand Name -->
+            <div class="logo">
+                <a href="{% url 'storage:home' %}">CloudStorage</a>
+            </div>
+
+            <!-- Navigation Links -->
+            <ul class="nav-links" id="nav-links">
+                <li><a href="{% url 'storage:home' %}">Home</a></li>
+                <li><a href="{% url 'storage:logout' %}">Logout</a></li>
+                <!-- Placeholder for additional links -->
+                {% comment %}
+                <li><a href="{% url 'subscriptions' %}">Subscriptions</a></li>
+                <li><a href="{% url 'about' %}">About</a></li>
+                {% endcomment %}
+                <li><a href="{% url 'storage:file_list' %}">Uploaded Files</a></li>
+                <li><a href="{% url 'storage:upload_file' %}">Upload Files</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main content section -->
     <main>
-        {% block content %}{% endblock %}
+        {% block content %}
+        {% endblock %}
     </main>
-    
+
+    <!-- Footer -->
     <footer>
-        <p>&copy; 2024 My Site</p>
+        <p>&copy; 2024 Cloud Storage. All rights reserved.</p>
     </footer>
+
+    <!-- JavaScript to toggle the hamburger menu -->
+    <script>
+        function toggleMenu() {
+            const navLinks = document.getElementById("nav-links");
+            navLinks.classList.toggle("active");  // Toggle the 'active' class on the nav-links
+        }
+    </script>
 </body>
 </html>

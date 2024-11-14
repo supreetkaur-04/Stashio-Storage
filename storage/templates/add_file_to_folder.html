@@ -1,0 +1,8 @@
+<!-- storage/templates/add_file_to_folder.html -->
+
+<h1>Upload File to {{ folder.name }}</h1>
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Upload</button>
+</form>

@@ -19,6 +19,10 @@ urlpatterns = [
     path('files/<int:file_id>/delete/', views.delete_file, name='delete_file'),
     path('folder/create/', views.create_folder, name='create_folder'),
     path('folder/<int:folder_id>/', views.folder_view, name='folder_view'),
+    path('folder/<int:folder_id>/delete/', views.delete_folder, name='delete_folder'),
+    path('folder/<int:folder_id>/add-file/', views.add_file_to_folder, name='add_file_to_folder'),
+    path('folder/<int:folder_id>/create-subfolder/', views.create_subfolder, name='create_subfolder'),
+    path('folder/<int:folder_id>/', views.folder_detail, name='folder_detail'),
 ]
 
 if settings.DEBUG:

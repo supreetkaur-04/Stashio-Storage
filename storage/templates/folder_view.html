@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% comment %} templates/folder_view.html {% endcomment %}
+
+{% block content %}
+  <h1>{{ folder.name }}</h1>
+  
+  <a href="{% url 'storage:create_subfolder' folder.id %}">Create Subfolder</a>
+
+  <h3>Subfolders:</h3>
+  <ul>
+    {% for subfolder in folder.subfolders %}
+      <li>
+        <a href="{% url 'storage:folder_view' subfolder.id %}">{{ subfolder.name }}</a>
+        <a href="{% url 'storage:delete_folder' subfolder.id %}">Delete</a>
+      </li>
+    {% empty %}
+      <p>No subfolders.</p>
+    {% endfor %}
+  </ul>
+  
+  <h3>Files:</h3>
+  <ul>
+    {% for file in folder.files %}
+      <li>
+        <a href="{% url 'storage:file_download' file.id %}">{{ file.name }}</a>
+        <form action="{% url 'storage:delete_file' file.id %}" method="POST" style="display:inline;">
+          {% csrf_token %}
+          <button type="submit">Delete</button>
+        </form>
+      </li>
+    {% empty %}
+      <p>No files found.</p>
+    {% endfor %}
+  </ul>
+{% endblock %}

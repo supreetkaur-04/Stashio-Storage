@@ -4,7 +4,6 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db.models import Sum
-from django import forms
 
 # List of allowed file extensions
 ALLOWED_EXTENSIONS = ['pdf', 'jpg', 'jpeg', 'png', 'txt', 'doc', 'docx', 'xls', 'xlsx']
@@ -23,12 +22,12 @@ class File(models.Model):
             self.size = self.file.size
         super().save(*args, **kwargs)
 
-    def __str__(self):
-        return self.name
-    
     def delete(self, *args, **kwargs):
         self.file.delete(save=False)  # Delete file from storage when the object is deleted
         super().delete(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
 
 # Function to calculate the total storage used by a user
 def get_user_storage_usage(user):
@@ -36,16 +35,24 @@ def get_user_storage_usage(user):
     total_storage = File.objects.filter(user=user).aggregate(Sum('size'))['size__sum'] or 0
     return total_storage
 
-
-# Folder Model
 class Folder(models.Model):
     name = models.CharField(max_length=255)
     parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def clean(self):
+        # Ensure that the folder cannot be its own parent
         if self.parent == self:
             raise ValidationError("A folder cannot be its own parent.")
 
     def __str__(self):
         return self.name
+
+    @property
+    def subfolders(self):
+        return Folder.objects.filter(parent=self)
+
+    @property
+    def files(self):
+        return File.objects.filter(folder=self)
+

@@ -1,0 +1,12 @@
+<!-- storage/templates/create_subfolder.html -->
+
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Create Subfolder inside "{{ parent_folder.name }}"</h1>
+  <form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Create Subfolder</button>
+  </form>
+{% endblock %}

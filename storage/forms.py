@@ -2,17 +2,31 @@
 
 from django import forms
 from .models import File, Folder, ALLOWED_EXTENSIONS
-from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
+from django.core.exceptions import ValidationError
+from django.contrib.auth.models import User
 
+ALLOWED_EXTENSIONS = ['pdf', 'jpg', 'jpeg', 'png', 'txt', 'doc', 'docx', 'xls', 'xlsx']
 
-# Form to upload a file
+class SignupForm(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput)
+
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password']
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.set_password(self.cleaned_data['password'])
+        if commit:
+            user.save()
+        return user
+    
 class FileUploadForm(forms.ModelForm):
     class Meta:
         model = File
-        fields = ['name', 'file']
+        fields = ['name', 'file']  # Fields for file upload
 
-    # Add file validation for size and type
     def clean_file(self):
         file = self.cleaned_data.get('file')
         
@@ -29,22 +43,15 @@ class FileUploadForm(forms.ModelForm):
         return file
 
 
-# Form for user signup using Django's built-in UserCreationForm
-class SignupForm(UserCreationForm):
-    class Meta:
-        model = User
-        fields = ['username', 'password1', 'password2']
-
-
-# Form to create/edit folders
 class FolderForm(forms.ModelForm):
     class Meta:
         model = Folder
-        fields = ['name', 'parent']
+        fields = ['name', 'parent']  # Parent folder selection
 
     def __init__(self, *args, **kwargs):
-        user = kwargs.get('user')
+        user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
+
         if user:
             # Limit the parent folder options to folders owned by the same user
             self.fields['parent'].queryset = Folder.objects.filter(user=user)
@@ -54,3 +61,11 @@ class FolderForm(forms.ModelForm):
         if parent == self.instance:
             raise forms.ValidationError("A folder cannot be its own parent.")
         return parent
+
+class FolderCreateForm(forms.Form):
+    folder_name = forms.CharField(max_length=100, required=True, label='Folder Name') 
+
+class SubfolderForm(forms.ModelForm):
+    class Meta:
+        model = Folder
+        fields = ['name'] 
