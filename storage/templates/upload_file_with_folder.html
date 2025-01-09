@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- storage/templates/upload_file_to_folder.html -->
+
+<h1>Upload File to {{ folder.name }}</h1>
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div>
+        {{ form.as_p }}
+        <input type="hidden" name="folder_id" value="{{ folder.id }}">
+    </div>
+    <button type="submit">Upload File</button>
+</form>
+
+<!-- Optional: Add a link to navigate back or perform other actions -->
+<div style="margin-top: 20px;">
+    <a href="{% url 'storage:folder_detail' folder_id=folder.id %}">Back to Folder</a>
+</div>
+
+{% endblock %}

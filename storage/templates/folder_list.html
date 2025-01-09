@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% comment %} templates/folder_list.html {% endcomment %}
+
+{% block content %}
+  <h1>Your Folders</h1>
+  
+  <ul>
+    {% for folder in folders %}
+      <li>
+        <a href="{% url 'storage:folder_detail' folder_id=folder.id %}">{{ folder.name }}</a>
+      </li>
+    {% empty %}
+      <li>No folders available. <a href="{% url 'storage:create_folder' %}">Create a new folder</a></li>
+    {% endfor %}
+  </ul>
+
+  <a href="{% url 'storage:create_folder' %}">Create a New Folder</a>
+{% endblock %}

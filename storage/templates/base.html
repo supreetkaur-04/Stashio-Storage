@@ -27,17 +27,27 @@
                 <a href="{% url 'storage:home' %}">CloudStorage</a>
             </div>
 
-            <!-- Navigation Links -->
             <ul class="nav-links" id="nav-links">
-                <li><a href="{% url 'storage:home' %}">Home</a></li>
-                <li><a href="{% url 'storage:logout' %}">Logout</a></li>
-                <!-- Placeholder for additional links -->
-                {% comment %}
-                <li><a href="{% url 'subscriptions' %}">Subscriptions</a></li>
-                <li><a href="{% url 'about' %}">About</a></li>
-                {% endcomment %}
-                <li><a href="{% url 'storage:file_list' %}">Uploaded Files</a></li>
-                <li><a href="{% url 'storage:upload_file' %}">Upload Files</a></li>
+                <li class="{% if request.resolver_match.url_name == 'storage:home' %}active{% endif %}">
+                    <a href="{% url 'storage:home' %}">Home</a>
+                </li>
+                {% if user.is_authenticated %}
+                    <!-- Show Logout if user is logged in -->
+                    <li>
+                        <form action="{% url 'storage:logout' %}" method="post" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" style="font-size: 18px;">Logout</button>
+                        </form>
+                    </li>
+                {% else %}
+                    <!-- Show Login if user is not logged in -->
+                    <li class="{% if request.resolver_match.url_name == 'storage:login' %}active{% endif %}">
+                        <a href="{% url 'storage:login' %}">Login</a>
+                    </li>
+                {% endif %}
+                
+                <li class="{% if request.path == '/uploaded_files/' %}active{% endif %}"><a href="{% url 'storage:file_list' %}">Uploaded Files</a></li>
+                <li class="{% if request.path == '/upload/' %}active{% endif %}"><a href="{% url 'storage:upload_file' %}">Upload Files</a></li>
             </ul>
         </div>
     </nav>
@@ -57,8 +67,13 @@
     <script>
         function toggleMenu() {
             const navLinks = document.getElementById("nav-links");
-            navLinks.classList.toggle("active");  // Toggle the 'active' class on the nav-links
+            navLinks.classList.toggle("active");
         }
     </script>
 </body>
 </html>
+
+
+{% comment %} <li class="{% if request.path == '/logout/' %}active{% endif %}">
+                    <a href="{% url 'storage:logout' %}">Logout</a>
+                </li> {% endcomment %}

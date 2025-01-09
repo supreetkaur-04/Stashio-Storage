@@ -1,0 +1,12 @@
+project_root/
+│
+├── cloud_storage/
+│   ├── settings.py
+│   └── wsgi.py
+│
+├── storage/
+│   ├── templates/
+│   ├── static/
+│   └── models.py
+│
+└── db.sqlite3

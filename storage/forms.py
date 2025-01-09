@@ -5,6 +5,8 @@ from .models import File, Folder, ALLOWED_EXTENSIONS
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
+import uuid
+
 
 ALLOWED_EXTENSIONS = ['pdf', 'jpg', 'jpeg', 'png', 'txt', 'doc', 'docx', 'xls', 'xlsx']
 
@@ -26,6 +28,9 @@ class FileUploadForm(forms.ModelForm):
     class Meta:
         model = File
         fields = ['name', 'file']  # Fields for file upload
+    
+    name = forms.CharField(max_length=100, label="File Name")
+    file = forms.FileField(label="Select File")
 
     def clean_file(self):
         file = self.cleaned_data.get('file')
@@ -69,3 +74,27 @@ class SubfolderForm(forms.ModelForm):
     class Meta:
         model = Folder
         fields = ['name'] 
+
+class CustomUserCreationForm(UserCreationForm):
+    email = forms.EmailField(required=True, label="Email")
+
+    class Meta:
+        model = User
+        fields = ("username", "email", "password1", "password2")
+
+    def clean_email(self):
+        email = self.cleaned_data.get("email")
+        if User.objects.filter(email=email).exists():
+            raise forms.ValidationError("A user with this email already exists.")
+        return email
+
+    def suggest_unique_username(self, base_username):
+        """
+        Suggest a unique username by appending a random UUID if the base username exists.
+        """
+        if not User.objects.filter(username=base_username).exists():
+            return base_username
+        while True:
+            unique_username = f"{base_username}_{uuid.uuid4().hex[:6]}"
+            if not User.objects.filter(username=unique_username).exists():
+                return unique_username

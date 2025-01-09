@@ -84,7 +84,7 @@ footer {
 }
 
 /* Button styles */
-button {
+.btn {
     background-color: #0044cc;
     color: white;
     padding: 10px 20px;
@@ -93,7 +93,7 @@ button {
     font-size: 16px;
 }
 
-button:hover {
+.btn:hover {
     background-color: #003399;
 }
 

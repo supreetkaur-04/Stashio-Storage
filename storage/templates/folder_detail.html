@@ -1,30 +1,43 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>{{ folder.name }}</title>
-</head>
-<body>
-    <h1>Folder: {{ folder.name }}</h1>
-    <p>Description: {{ folder.description }}</p>  <!-- Example of displaying description -->
-    
-    <h2>Subfolders ({{ num_subfolders }})</h2>
-    <ul>
-        {% for subfolder in subfolders %}
-            <li><a href="{% url 'folder_detail' subfolder.id %}">{{ subfolder.name }}</a></li>
-        {% empty %}
-            <li>No subfolders available.</li>
-        {% endfor %}
-    </ul>
+{% extends "base.html" %}
 
-    <h2>Files ({{ num_files }})</h2>
-    <ul>
-        {% for file in files %}
-            <li><a href="{{ file.get_absolute_url }}">{{ file.name }}</a> - {{ file.size }} KB</li>
-        {% empty %}
-            <li>No files in this folder.</li>
-        {% endfor %}
-    </ul>
+{% comment %} templates/folder_detail.html {% endcomment %}
 
-    <p><a href="{% url 'folder_list' %}">Back to folder list</a></p>
-</body>
-</html>
+{% block content %}
+  <h1>Files in "{{ folder.name }}"</h1>
+
+  <h2>Upload a New File</h2>
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="hidden" name="folder_id" value="{{ folder.id }}">
+    <button type="submit" name="upload_file">Upload File</button>
+  </form>
+
+  {% if storage_used|add:1 > MAX_STORAGE %}
+    <p>You have reached your storage limit. Please delete some files before uploading more.</p>
+  {% else %}
+    <a href="{% url 'storage:upload_file' %}">Upload a new file</a>
+  {% endif %}
+
+
+  <h2>Files</h2>
+  <ul>
+    {% for file in files %}
+      <li>{{ file.name }}</li>
+    {% endfor %}
+  </ul>
+
+  <h2>Subfolders</h2>
+  {% comment %} <ul>
+    <li><a href="{% url 'storage:file_list' %}">Back to file list</a></li>
+  </ul> {% endcomment %}
+  <ul>
+    {% for subfolder in subfolders %}
+      <li><a href="{% url 'storage:folder_detail' subfolder.id %}">{{ subfolder.name }}</a></li>
+    {% endfor %}
+  </ul>
+
+  {% comment %} <p>
+    <a href="{% url 'storage:file_list' %}">Back to file list</a>
+  </p> {% endcomment %}
+{% endblock %}

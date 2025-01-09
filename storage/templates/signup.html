@@ -1,13 +1,13 @@
-<!-- storage/templates/signup.html -->
-
 {% extends "base.html" %}
+
+{% comment %} templates/signup.html {% endcomment %}
 
 {% block content %}
   <h1>Sign Up</h1>
 
   <!-- Display form errors if there are any -->
   {% if form.errors %}
-    <div class="errors">
+    <div class="alert alert-danger">
       <ul>
         {% for field in form %}
           {% for error in field.errors %}
@@ -18,27 +18,33 @@
     </div>
   {% endif %}
 
+  <!-- Signup Form -->
   <form method="post" autocomplete="on">
     {% csrf_token %}
-
     <div class="form-group">
       <label for="id_username">Username:</label>
       {{ form.username }}
-      <br><br>
     </div>
-
+    <br>
+    <div class="form-group">
+      <label for="id_email">Email:</label>
+      {{ form.email }}
+    </div>
+    <br>
     <div class="form-group">
       <label for="id_password1">Password:</label>
       {{ form.password1 }}
-      <br><br>
     </div>
-
+    <br>
     <div class="form-group">
       <label for="id_password2">Confirm Password:</label>
       {{ form.password2 }}
-      <br><br>
     </div>
+    <br>
+    <button type="submit" class="btn btn-primary">Sign Up</button>
+  </form>
 
-    <button type="submit">Sign Up</button>
-  </form>    
+  <p>
+    Already have an account? <a href="{% url 'login' %}">Login here</a>.
+  </p>
 {% endblock %}

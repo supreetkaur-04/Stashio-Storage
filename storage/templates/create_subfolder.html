@@ -1,12 +1,27 @@
-<!-- storage/templates/create_subfolder.html -->
+{% extends "base.html" %}
 
-{% extends 'base.html' %}
+<!-- storage/templates/create_subfolder.html -->
 
 {% block content %}
   <h1>Create Subfolder inside "{{ parent_folder.name }}"</h1>
+
   <form method="POST">
     {% csrf_token %}
-    {{ form.as_p }}
+    <label for="name">Subfolder Name:</label>
+    <input type="text" name="name" id="name" required>
     <button type="submit">Create Subfolder</button>
   </form>
+
+  <br>
+  <a href="{% url 'storage:folder_detail' folder_id=parent_folder.id %}">Go back to folder</a>
+
+  {% if messages %}
+    <ul>
+      {% for message in messages %}
+        <li class="message">{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
 {% endblock %}
+
+

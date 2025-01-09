@@ -3,11 +3,30 @@
 <!-- storage/templates/upload_file.html -->
 
 {% block content %}
-  <h1>Upload a File</h1>
-  <form method="POST" enctype="multipart/form-data">
+  <h1>Upload a File to {% if folder %} "{{ folder.name }}" {% else %} "Root" {% endif %}</h1>
+
+  <!-- Add this link above the form -->
+  {% if folder %}
+    <a href="{% url 'storage:upload_file_with_folder' folder_id=folder.id %}">Upload File</a>
+  {% else %}
+    <a href="{% url 'storage:upload_file' %}">Upload File</a>
+  {% endif %}
+  
+  <!-- The form for file upload -->
+  <form action="{% if folder %}{% url 'storage:upload_file' folder_id=folder.id %}{% else %}{% url 'storage:upload_file' %}{% endif %}" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Upload</button>
+    <button type="submit">Upload File</button>
   </form>
-  <a href="{% url 'storage:file_list' %}">Back to File List</a>
+
+  <br>
+  <a href="{% if folder %}{% url 'storage:folder_detail' folder_id=folder.id %}{% else %}{% url 'storage:folder_list' %}{% endif %}">Go back to folder</a>
+
+  {% if messages %}
+    <ul>
+      {% for message in messages %}
+        <li class="message">{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
 {% endblock %}

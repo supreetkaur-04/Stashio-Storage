@@ -4,7 +4,7 @@
 
 {% block content %}
   <h1>{{ folder.name }}</h1>
-  
+
   <a href="{% url 'storage:create_subfolder' folder.id %}">Create Subfolder</a>
 
   <h3>Subfolders:</h3>
@@ -12,13 +12,13 @@
     {% for subfolder in folder.subfolders %}
       <li>
         <a href="{% url 'storage:folder_view' subfolder.id %}">{{ subfolder.name }}</a>
-        <a href="{% url 'storage:delete_folder' subfolder.id %}">Delete</a>
+        <a href="{% url 'storage:delete_folder' subfolder.id %}" onclick="return confirm('Are you sure you want to delete this subfolder?')">Delete</a>
       </li>
     {% empty %}
       <p>No subfolders.</p>
     {% endfor %}
   </ul>
-  
+
   <h3>Files:</h3>
   <ul>
     {% for file in folder.files %}
@@ -33,4 +33,29 @@
       <p>No files found.</p>
     {% endfor %}
   </ul>
+
+  {% comment %} <h3>Upload a File</h3>
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" name="upload_file">Upload File</button>
+  </form> {% endcomment %}
+
+  {% if storage_used|add:1 > MAX_STORAGE %}
+    <p>You have reached your storage limit. Please delete some files before uploading more.</p>
+  {% else %}
+    <a href="{% url 'storage:upload_file_with_folder' folder.id %}">Upload a new file</a>
+  {% endif %}
+
+
+  <br>
+  <a href="{% url 'storage:folder_list' %}">Go back to all folders</a>
+
+  {% if messages %}
+    <ul>
+      {% for message in messages %}
+        <li class="message">{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
 {% endblock %}
