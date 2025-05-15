@@ -1,69 +1,78 @@
 {% load static %}
-
-{% comment %} templates/base.html {% endcomment %}
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Cloud Storage{% endblock %}</title>
+    <title>{% block title %}SecureCloud{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    {% comment %} <link rel="stylesheet" href="{% static 'css/home.css' %}"> {% endcomment %}
     <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <!-- Navbar starts here -->
     <nav class="navbar">
         <div class="navbar-container">
-            <!-- Hamburger Icon for Mobile -->
             <div class="hamburger" onclick="toggleMenu()">
                 <span class="bar"></span>
                 <span class="bar"></span>
                 <span class="bar"></span>
             </div>
 
-            <!-- Logo/Brand Name -->
             <div class="logo">
-                <a href="{% url 'storage:home' %}">CloudStorage</a>
+                <a href="{% url 'storage:home' %}">
+                    <i class="fas fa-cloud-upload-alt logo-icon"></i>
+                    SecureCloud
+                </a>
             </div>
 
             <ul class="nav-links" id="nav-links">
-                <li class="{% if request.resolver_match.url_name == 'storage:home' %}active{% endif %}">
+                <li class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">
                     <a href="{% url 'storage:home' %}">Home</a>
                 </li>
                 {% if user.is_authenticated %}
-                    <!-- Show Logout if user is logged in -->
                     <li>
-                        <form action="{% url 'storage:logout' %}" method="post" style="display:inline;">
+                        <a href="{% url 'storage:logout' %}" class="nav-link-button" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            Logout <i class="fas fa-sign-out-alt"></i>
+                        </a>
+                        <form id="logout-form" action="{% url 'storage:logout' %}" method="POST" style="display: none;">
                             {% csrf_token %}
-                            <button type="submit" style="font-size: 18px;">Logout</button>
                         </form>
                     </li>
+                    <li class="{% if request.resolver_match.url_name == 'file_list' %}active{% endif %}">
+                        <a href="{% url 'storage:file_list' %}">My Files</a>
+                    </li>
+                    <li class="{% if request.resolver_match.url_name == 'upload_file' %}active{% endif %}">
+                        <a href="{% url 'storage:upload_file' %}">Upload</a>
+                    </li>
                 {% else %}
-                    <!-- Show Login if user is not logged in -->
-                    <li class="{% if request.resolver_match.url_name == 'storage:login' %}active{% endif %}">
+                    <li class="{% if request.resolver_match.url_name == 'login' %}active{% endif %}">
                         <a href="{% url 'storage:login' %}">Login</a>
                     </li>
+                    <li class="{% if request.resolver_match.url_name == 'signup' %}active{% endif %}">
+                        <a href="{% url 'storage:signup' %}" class="cta-nav">Sign Up</a>
+                    </li>
                 {% endif %}
-                
-                <li class="{% if request.path == '/uploaded_files/' %}active{% endif %}"><a href="{% url 'storage:file_list' %}">Uploaded Files</a></li>
-                <li class="{% if request.path == '/upload/' %}active{% endif %}"><a href="{% url 'storage:upload_file' %}">Upload Files</a></li>
             </ul>
         </div>
     </nav>
 
-    <!-- Main content section -->
     <main>
-        {% block content %}
-        {% endblock %}
+        {% block content %}{% endblock %}
     </main>
 
-    <!-- Footer -->
-    <footer>
-        <p>&copy; 2024 Cloud Storage. All rights reserved.</p>
+    <footer class="main-footer">
+        <div class="footer-content">
+            <p>&copy; 2024 SecureCloud. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Security Overview</a>
+            </div>
+        </div>
     </footer>
 
-    <!-- JavaScript to toggle the hamburger menu -->
     <script>
         function toggleMenu() {
             const navLinks = document.getElementById("nav-links");
@@ -72,8 +81,3 @@
     </script>
 </body>
 </html>
-
-
-{% comment %} <li class="{% if request.path == '/logout/' %}active{% endif %}">
-                    <a href="{% url 'storage:logout' %}">Logout</a>
-                </li> {% endcomment %}

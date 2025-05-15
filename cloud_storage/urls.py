@@ -26,5 +26,9 @@ urlpatterns = [
     path('', include('storage.urls')),  # Main storage URLs
     path('login/', auth_views.LoginView.as_view(), name='login'), 
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('accounts/', include('allauth.account.urls')),
+    path('accounts/', include('allauth.socialaccount.urls')),
+    path('accounts/', include('allauth.socialaccount.providers.google.urls')),
+    path('accounts/', include('allauth.socialaccount.providers.facebook.urls')),
 ]
 

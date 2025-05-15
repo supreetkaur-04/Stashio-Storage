@@ -1,14 +1,52 @@
 {% extends "base.html" %}
-
-{% comment %} templates/home.html {% endcomment %}
-
+{% load static %} 
+{% comment %} {% block extra_css %}
+  <link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock %} {% endcomment %}
 {% block content %}
-  {% if user.is_authenticated %}
-    <h1>Welcome, {{ user.username }}!</h1>
-    <a href="{% url 'storage:file_list' %}">Go to your files</a>
-  {% else %}
-    <h1>Welcome to the Cloud Storage App</h1>
-    <a href="{% url 'login' %}">Login</a> | <a href="{% url 'storage:signup' %}">Sign up</a>
-  {% endif %}
-{% endblock %}
+<div class="hero-section">
+  <div class="hero-content">
+    <div class="hero-text">
+      {% if user.is_authenticated %}
+        <h1 class="main-heading">Welcome Back, <span>{{ user.username }}</span></h1>
+        <p class="subheading">Your digital workspace awaits</p>
+        <a href="{% url 'storage:file_list' %}" class="cta-main">
+          Open Workspace <i class="fas fa-arrow-right"></i>
+        </a>
+      {% else %}
+        <h1 class="main-heading">Enterprise-Grade<br>Secure Storage</h1>
+        <p class="subheading">Where professional file management meets simplicity</p>
+        <div class="cta-group">
+          <a href="{% url 'login' %}" class="cta-main">
+            Sign In <i class="fas fa-fingerprint"></i>
+          </a>
+          <a href="{% url 'storage:signup' %}" class="cta-secondary">
+            Start Free Trial <i class="fas fa-rocket"></i>
+          </a>
+        </div>
+      {% endif %}
+    </div>
+    <div class="hero-image">
+      <img src="{% static 'images/cloud-illustration.png' %}" alt="Cloud storage illustration">
+    </div>
+  </div>
+</div>
 
+<section class="value-props">
+  <div class="prop-card">
+    <div class="prop-icon"><i class="fas fa-database"></i></div>
+    <h3>Bank-Level Security</h3>
+    <p>Enterprise-grade encryption with zero-knowledge architecture</p>
+  </div>
+  <div class="prop-card">
+    <div class="prop-icon"><i class="fas fa-network-wired"></i></div>
+    <h3>Smart Sync</h3>
+    <p>Real-time collaboration across teams and devices</p>
+  </div>
+  <div class="prop-card">
+    <div class="prop-icon"><i class="fas fa-shield-check"></i></div>
+    <h3>Compliance Ready</h3>
+    <p>GDPR, HIPAA, and SOC2 compliant infrastructure</p>
+  </div>
+</section>
+{% endblock %}
