@@ -5,10 +5,30 @@ from .models import File, Folder, ALLOWED_EXTENSIONS
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
+from allauth.account.forms import LoginForm
 import uuid
 
-
 ALLOWED_EXTENSIONS = ['pdf', 'jpg', 'jpeg', 'png', 'txt', 'doc', 'docx', 'xls', 'xlsx']
+
+# class CustomLoginForm(LoginForm):
+#     """Replace AllAuth’s single 'login' field with a dedicated email field."""
+#     email = forms.EmailField(
+#         label="Email Address",
+#         widget=forms.EmailInput(attrs={
+#             "placeholder": "you@example.com",
+#             # "class": "input"  # or whatever your CSS class is
+#         })
+#     )
+
+#     def __init__(self, *args, **kwargs):
+#         super().__init__(*args, **kwargs)
+#         # remove the default 'login' field
+#         self.fields.pop("login", None)
+#         # reorder fields so email is first
+#         self.fields = {
+#             "email": self.fields["email"],
+#             "password": self.fields["password"],
+#         }
 
 class SignupForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput)

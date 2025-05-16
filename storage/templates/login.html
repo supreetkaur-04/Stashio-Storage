@@ -1,51 +1,71 @@
 {% extends "base.html" %}
+{% load static socialaccount %}
+{% load static %}
 
-{% comment %} templates/login.html {% endcomment %}
-
-{% load socialaccount %}
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% endblock %}
 
 {% block content %}
-  <h1>Login</h1>
+<div class="auth-container">
+  <div class="glass-card">
+    <div class="auth-header">
+      <h1>Secure Sign In</h1>
+      <p>Access your encrypted workspace</p>
+    </div>
 
-  <!-- Display errors if login fails -->
-  {% if form.errors %}
-    <div class="alert alert-danger">
-      <ul>
+    {% if form.errors %}
+    <div class="error-alert">
+      <i class="fas fa-shield-exclamation"></i>
+      <div>
         {% for field in form %}
           {% for error in field.errors %}
-            <li>{{ error }}</li>
+            <p>{{ error }}</p>
           {% endfor %}
         {% endfor %}
-      </ul>
+      </div>
     </div>
-  {% endif %}
+    {% endif %}
 
-  <!-- Login Form -->
-  <form method="post" autocomplete="on">
-    {% csrf_token %}
+    <form method="post" class="auth-form">
+      {% csrf_token %}
+      
+      <div class="input-group">
+        <label for="{{ form.email.id_for_label }}">
+          <i class="fas fa-envelope"></i>
+          Email Address
+        </label>
+        {{ form.email }}
+      </div>
 
-    <div class="form-group">
-      <label for="id_email">Email:</label>
-      {{ form.login }}
+      <div class="input-group">
+        <label for="id_password">
+          <i class="fas fa-lock"></i>
+          Password
+        </label>
+        {{ form.password }}
+      </div>
+
+      <button type="submit" class="auth-button primary">
+        <i class="fas fa-unlock"></i>
+        Access Workspace
+      </button>
+    </form>
+
+    <div class="social-auth">
+      <p class="divider">or continue with</p>
+      <a href="{% provider_login_url 'google' %}" class="auth-button secondary">
+        <img src="{% static 'images/google-logo.png' %}" alt="Google">
+        Google Account
+      </a>
     </div>
-    <br>
-    <div class="form-group">
-      <label for="id_password">Password:</label>
-      {{ form.password }}
-    </div>
-    <br>
-    <button type="submit" class="btn btn-primary">Login</button>
-  </form>
 
-  <p>Or login with:</p>
-  {% comment %} <a href="{% url 'socialaccount_login' 'google' %}">Login with Google</a>
-  <a href="{% provider_login_url 'google' %}">Login with Google</a>
-
-  <a href="{% url 'socialaccount_login' 'facebook' %}" class="btn btn-primary">Facebook</a> {% endcomment %}
-
-{% comment %} <a href="{% url 'socialaccount_login' 'google' %}">Login with Google</a> {% endcomment %}
-  <a href="{% provider_login_url "google" %}" class="btn btn-outline-danger">Login with Google</a> 
-  {% comment %} <a href="{% provider_login_url 'facebook' %}">Login with Facebook</a> {% endcomment %}
-  
-  <p>Don't have an account? <a href="{% url 'storage:signup' %}">Sign up here</a>.</p>
+    <p class="auth-footer">
+      New to SecureCloud? 
+      <a href="{% url 'storage:signup' %}" class="auth-link">
+        Create account
+      </a>
+    </p>
+  </div>
+</div>
 {% endblock %}

@@ -1,83 +1,356 @@
 {% load static %}
+
+{% comment %} templates/base.html {% endcomment %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}SecureCloud{% endblock %}</title>
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-    {% comment %} <link rel="stylesheet" href="{% static 'css/home.css' %}"> {% endcomment %}
-    <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>SecureCloud Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    {% load static %}
+    {% comment %} <link rel="stylesheet" href="{% static 'css/styles.css' %}"> {% endcomment %}
+    {% block extra_css %}{% endblock %}
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        /* Navigation Styles */
+        .navbar {
+            background: #0F1A1C;
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            position: static;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo a {
+            color: #fff;
+            font-size: 1.5rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo i {
+            color: #2A9D8F;
+            font-size: 1.8rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+        }
+
+        .nav-links a:hover,
+        .nav-links .active a {
+            background: rgba(42, 157, 143, 0.1);
+            color: #2A9D8F;
+        }
+
+        .nav-button {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.8);
+            cursor: pointer;
+            font: inherit;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+        }
+
+        .nav-button:hover {
+            background: rgba(231, 111, 81, 0.1);
+            color: #E76F51;
+        }
+
+        /* Footer Styles */
+        .footer {
+            background: #0F1A1C;
+            padding: 4rem 2rem;
+            margin-top: auto;
+        }
+
+        .footer-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+        }
+
+        .footer-section h4 {
+            color: #2A9D8F;
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-section a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: #2A9D8F;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            font-size: 1.5rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .social-links a:hover {
+            color: #2A9D8F;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                right: -100%;
+                flex-direction: column;
+                background: rgba(16, 24, 32, 0.98);
+                width: 100%;
+                text-align: center;
+                transition: 0.3s;
+                padding: 2rem 0;
+                gap: 1.5rem;
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .hamburger {
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+                cursor: pointer;
+                z-index: 100;
+            }
+
+            .hamburger .bar {
+                width: 25px;
+                height: 3px;
+                background: #fff;
+                transition: all 0.3s ease;
+            }
+
+            .hamburger.active .bar:nth-child(1) {
+                transform: translateY(8px) rotate(45deg);
+            }
+
+            .hamburger.active .bar:nth-child(2) {
+                opacity: 0;
+            }
+
+            .hamburger.active .bar:nth-child(3) {
+                transform: translateY(-8px) rotate(-45deg);
+            }
+        }
+    </style>
 </head>
 <body>
+    <!-- Navigation -->
     <nav class="navbar">
-        <div class="navbar-container">
-            <div class="hamburger" onclick="toggleMenu()">
-                <span class="bar"></span>
-                <span class="bar"></span>
-                <span class="bar"></span>
-            </div>
-
+        <div class="nav-container">
             <div class="logo">
                 <a href="{% url 'storage:home' %}">
-                    <i class="fas fa-cloud-upload-alt logo-icon"></i>
-                    SecureCloud
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    SecureCloud Pro
                 </a>
             </div>
 
-            <ul class="nav-links" id="nav-links">
-                <li class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">
+            <ul class="nav-links">
+                <li class="{% if request.resolver_match.url_name == 'storage:home' %}active{% endif %}">
                     <a href="{% url 'storage:home' %}">Home</a>
                 </li>
+                <li class="{% if request.path == '/uploaded_files/' %}active{% endif %}">
+                    <a href="{% url 'storage:file_list' %}">Dashboard</a>
+                </li>
+                <li class="{% if request.path == '/upload/' %}active{% endif %}">
+                    <a href="{% url 'storage:upload_file' %}">Upload</a>
+                </li>
+                
                 {% if user.is_authenticated %}
-                    <li>
-                        <a href="{% url 'storage:logout' %}" class="nav-link-button" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                            Logout <i class="fas fa-sign-out-alt"></i>
-                        </a>
-                        <form id="logout-form" action="{% url 'storage:logout' %}" method="POST" style="display: none;">
-                            {% csrf_token %}
-                        </form>
-                    </li>
-                    <li class="{% if request.resolver_match.url_name == 'file_list' %}active{% endif %}">
-                        <a href="{% url 'storage:file_list' %}">My Files</a>
-                    </li>
-                    <li class="{% if request.resolver_match.url_name == 'upload_file' %}active{% endif %}">
-                        <a href="{% url 'storage:upload_file' %}">Upload</a>
-                    </li>
+                <li class="auth-link">
+                    <form action="{% url 'storage:logout' %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="nav-button">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </button>
+                    </form>
+                </li>
                 {% else %}
-                    <li class="{% if request.resolver_match.url_name == 'login' %}active{% endif %}">
-                        <a href="{% url 'storage:login' %}">Login</a>
-                    </li>
-                    <li class="{% if request.resolver_match.url_name == 'signup' %}active{% endif %}">
-                        <a href="{% url 'storage:signup' %}" class="cta-nav">Sign Up</a>
-                    </li>
+                <li class="{% if request.resolver_match.url_name == 'storage:login' %}active{% endif %} auth-link">
+                    <a href="{% url 'storage:login' %}">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                    </a>
+                </li>
                 {% endif %}
             </ul>
+
+            <div class="hamburger">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+            </div>
         </div>
     </nav>
 
+    <!-- Main Content -->
     <main>
         {% block content %}{% endblock %}
     </main>
 
-    <footer class="main-footer">
-        <div class="footer-content">
-            <p>&copy; 2024 SecureCloud. All rights reserved.</p>
-            <div class="footer-links">
-                <a href="#">Privacy Policy</a>
-                <a href="#">Terms of Service</a>
-                <a href="#">Security Overview</a>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-grid">
+            <div class="footer-section">
+                <h4>SecureCloud Pro</h4>
+                <p>Enterprise-grade secure storage solutions</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-github"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                </div>
             </div>
+
+            <div class="footer-section">
+                <h4 style="padding-left: 40px;">Services</h4>
+                <ul>
+                    <li><a href="#">Cloud Storage</a></li>
+                    <li><a href="#">File Sharing</a></li>
+                    <li><a href="#">Data Encryption</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h4 style="padding-left: 40px;">Legal</h4>
+                <ul>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Compliance</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2024 SecureCloud Pro. All rights reserved.</p>
         </div>
     </footer>
 
     <script>
-        function toggleMenu() {
-            const navLinks = document.getElementById("nav-links");
+        // Hamburger Menu Toggle
+        const hamburger = document.querySelector(".hamburger");
+        const navLinks = document.querySelector(".nav-links");
+
+        hamburger.addEventListener("click", (e) => {
+            e.stopPropagation();
             navLinks.classList.toggle("active");
+            hamburger.classList.toggle("active");
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener("click", (e) => {
+         //   if (!hamburger.contains(e.target) && !navLinks.contains(e.target)) {
+         //       navLinks.classList.remove("active");
+         //       hamburger.classList.remove("active");
+         //   }
+            if (navLinks.classList.contains("active")) {
+            navLinks.classList.remove("active");
+            hamburger.classList.remove("active");
         }
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+        // Add parallax effect to footer
+        window.addEventListener('scroll', () => {
+            const footer = document.querySelector('.footer');
+            const scrollPosition = window.pageYOffset;
+            footer.style.backgroundPositionY = `${scrollPosition * 0.5}px`;
+        });
+
+        // Add hover effect to cards
+        document.querySelectorAll('.feature-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.transform = `
+                    perspective(1000px)
+                    rotateX(${(y - rect.height/2) / 15}deg)
+                    rotateY(${-(x - rect.width/2) / 15}deg)
+                `;
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'none';
+            });
+        });
     </script>
 </body>
 </html>

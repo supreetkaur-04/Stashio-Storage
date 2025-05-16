@@ -142,3 +142,8 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'
 
 SOCIAL_AUTH_FACEBOOK_KEY = 'your-facebook-app-id'
 SOCIAL_AUTH_FACEBOOK_SECRET = 'your-facebook-app-secret'
+
+ACCOUNT_FORMS = {
+    "login": "storage.forms.CustomLoginForm",
+    "signup": "storage.forms.CustomUserCreationForm",
+}

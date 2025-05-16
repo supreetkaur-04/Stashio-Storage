@@ -1,52 +1,82 @@
 {% extends "base.html" %}
-{% load static %} 
-{% comment %} {% block extra_css %}
+{% load static %}
+
+{% block extra_css %}
   <link rel="stylesheet" href="{% static 'css/home.css' %}">
-{% endblock %} {% endcomment %}
+{% endblock %}
+
 {% block content %}
-<div class="hero-section">
-  <div class="hero-content">
-    <div class="hero-text">
-      {% if user.is_authenticated %}
-        <h1 class="main-heading">Welcome Back, <span>{{ user.username }}</span></h1>
-        <p class="subheading">Your digital workspace awaits</p>
-        <a href="{% url 'storage:file_list' %}" class="cta-main">
-          Open Workspace <i class="fas fa-arrow-right"></i>
-        </a>
-      {% else %}
-        <h1 class="main-heading">Enterprise-Grade<br>Secure Storage</h1>
-        <p class="subheading">Where professional file management meets simplicity</p>
-        <div class="cta-group">
-          <a href="{% url 'login' %}" class="cta-main">
-            Sign In <i class="fas fa-fingerprint"></i>
+<div class="hero">
+  <div class="glass-container">
+    <div class="hero-content">
+      <div class="text-content">
+        {% if user.is_authenticated %}
+          <h1 class="animate-text">Welcome Back, <span>{{ user.username }}</span></h1>
+          <p class="hero-sub">Your secure workspace is ready</p>
+          <a href="{% url 'storage:file_list' %}" class="glow-button">
+            Enter Dashboard <i class="fas fa-sign-in-alt"></i>
           </a>
-          <a href="{% url 'storage:signup' %}" class="cta-secondary">
-            Start Free Trial <i class="fas fa-rocket"></i>
-          </a>
-        </div>
-      {% endif %}
-    </div>
-    <div class="hero-image">
-      <img src="{% static 'images/cloud-illustration.png' %}" alt="Cloud storage illustration">
+        {% else %}
+          <h1 class="animate-text">Next-Gen <br>Secure <span>Storage</span></h1>
+          <p class="hero-sub">Enterprise-grade security meets elegant simplicity</p>
+          <div class="button-group">
+            <a href="{% url 'login' %}" class="glow-button">
+              Secure Login <i class="fas fa-fingerprint"></i>
+            </a>
+            {% comment %} <a href="{% url 'storage:signup' %}" class="border-button">
+              Start Free Trial <i class="fas fa-gem"></i> {% endcomment %}
+            </a>
+          </div>
+        {% endif %}
+      </div>
+      <div class="visual-wrapper">
+        <div class="gradient-overlay"></div>
+        <img src="{% static 'images/security-illustration.png' %}" class="floating" alt="Security Illustration" style="width: 100%;">
+      </div>
     </div>
   </div>
 </div>
 
-<section class="value-props">
-  <div class="prop-card">
-    <div class="prop-icon"><i class="fas fa-database"></i></div>
-    <h3>Bank-Level Security</h3>
-    <p>Enterprise-grade encryption with zero-knowledge architecture</p>
-  </div>
-  <div class="prop-card">
-    <div class="prop-icon"><i class="fas fa-network-wired"></i></div>
-    <h3>Smart Sync</h3>
-    <p>Real-time collaboration across teams and devices</p>
-  </div>
-  <div class="prop-card">
-    <div class="prop-icon"><i class="fas fa-shield-check"></i></div>
-    <h3>Compliance Ready</h3>
-    <p>GDPR, HIPAA, and SOC2 compliant infrastructure</p>
+<section class="features">
+  <div class="feature-grid">
+    <article class="feature-card">
+      <div class="icon-container gradient-1">
+        <i class="fas fa-lock"></i>
+      </div>
+      <h3>Zero-Knowledge Encryption</h3>
+      <p>End-to-end encryption where only you hold the keys</p>
+      <div class="shine"></div>
+    </article>
+    
+    <article class="feature-card">
+      <div class="icon-container gradient-2">
+        <i class="fas fa-infinity"></i>
+      </div>
+      <h3>Scalable Architecture</h3>
+      <p>From personal use to enterprise-level storage needs</p>
+      <div class="shine"></div>
+    </article>
+
+    <article class="feature-card">
+      <div class="icon-container gradient-3">
+        <i class="fas fa-bolt"></i>
+      </div>
+      <h3>Instant Access</h3>
+      <p>Global CDN ensures fastest possible file delivery</p>
+      <div class="shine"></div>
+    </article>
   </div>
 </section>
+
+<section class="cta-section">
+  <div class="parallax-background"></div>
+  <div class="cta-content">
+    <h2>Ready for Digital Excellence?</h2>
+    <p>Join thousands of professionals who trust their data with us</p>
+    <a href="{% url 'storage:signup' %}" class="cta-pill" style="text-decoration: none; color: white;">
+      Get Started Now <i class="fas fa-chevron-right"></i>
+    </a>
+  </div>
+</section>
+
 {% endblock %}
