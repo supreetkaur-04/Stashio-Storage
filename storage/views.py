@@ -8,12 +8,22 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseForbidden, FileResponse         # (this file response)
 from .forms import FileUploadForm, FolderCreateForm, CustomUserCreationForm
 from .models import Folder, File, get_user_storage_usage
+from .forms import CustomLoginForm
+from .forms import UsernameOrEmailLoginForm
 
 
 def home(request):
     return render(request, 'home.html')
 
-
+# def login_view(request):
+#     if request.method == 'POST':
+#         form = UsernameOrEmailLoginForm(request, data=request.POST)
+#         if form.is_valid():
+#             login(request, form.get_user())
+#             return redirect('storage:file_list')
+#     else:
+#         form = UsernameOrEmailLoginForm()
+#     return render(request, 'login.html', {'form': form})
 
 # def signup(request):
 #     if request.method == 'POST':
@@ -44,19 +54,17 @@ def signup(request):
     return render(request, 'signup.html', {'form': form})
  
 
-
 def login_view(request):
     if request.method == 'POST':
-        form = AuthenticationForm(request, data=request.POST)
+        form = CustomLoginForm(data=request.POST, request=request)
         if form.is_valid():
-            user = form.get_user()
+            user = form.user 
             login(request, user)
             next_url = request.GET.get('next', 'storage:file_list') 
             return redirect(next_url)
     else:
-        form = AuthenticationForm()
-    return render(request, 'account/login.html', {'form': form})
-
+        form = CustomLoginForm()
+    return render(request, 'login.html', {'form': form})
 
 def logout_view(request):
     logout(request)

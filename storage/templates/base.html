@@ -29,7 +29,7 @@
             backdrop-filter: blur(10px);
             padding: 1rem 2rem;
             position: static;
-            width: 100%;
+            {% comment %} width: 100%; {% endcomment %}
             top: 0;
             z-index: 1000;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -42,10 +42,10 @@
             justify-content: space-between;
             align-items: center;
         }
-
+        
         .logo a {
             color: #fff;
-            font-size: 1.5rem;
+            font-size: 2.5rem;
             font-weight: 600;
             text-decoration: none;
             display: flex;
@@ -66,6 +66,7 @@
         }
 
         .nav-links a {
+            font-size: 1.2rem;
             color: rgba(255, 255, 255, 0.8);
             text-decoration: none;
             font-weight: 500;
@@ -78,6 +79,11 @@
         .nav-links .active a {
             background: rgba(42, 157, 143, 0.1);
             color: #2A9D8F;
+        }
+
+        .auth-link {
+            font-weight: 500;
+            font-size: 1.2rem;
         }
 
         .nav-button {
@@ -212,7 +218,7 @@
             <div class="logo">
                 <a href="{% url 'storage:home' %}">
                     <i class="fas fa-cloud-upload-alt"></i>
-                    SecureCloud Pro
+                    Stashio 
                 </a>
             </div>
 

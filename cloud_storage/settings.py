@@ -101,27 +101,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-# Django Sites Framework (Required)
-SITE_ID = 1
-
-# Allauth Configuration
-# ACCOUNT_AUTHENTICATION_METHOD = 'email'
-# ACCOUNT_EMAIL_REQUIRED = True
-# ACCOUNT_USERNAME_REQUIRED = False  # Username not required
-ACCOUNT_EMAIL_VERIFICATION = 'optional'
-ACCOUNT_SIGNUP_REDIRECT_URL = '/'
-LOGIN_REDIRECT_URL = '/'  # Redirect after login
-LOGOUT_REDIRECT_URL = '/'
-ACCOUNT_LOGOUT_ON_GET = True
-# Old (deprecated)
-# ACCOUNT_AUTHENTICATION_METHOD = 'email'
-# ACCOUNT_EMAIL_REQUIRED = True
-# ACCOUNT_USERNAME_REQUIRED = False
-
-# New (recommended)
-ACCOUNT_LOGIN_METHODS = {"email"}
-ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*", "password2*"]
-
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
         'SCOPE': ['email', 'profile'],
@@ -147,3 +126,32 @@ ACCOUNT_FORMS = {
     "login": "storage.forms.CustomLoginForm",
     "signup": "storage.forms.CustomUserCreationForm",
 }
+# AUTH_USER_MODEL = 'storage.CustomUser'
+# ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_FORMS = {
+    'login': 'storage.forms.CustomLoginForm',
+}
+
+# Django Sites Framework (Required)
+SITE_ID = 1
+
+# Allauth Configuration
+# ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_REQUIRED = True
+# ACCOUNT_USERNAME_REQUIRED = False  # Username not required
+ACCOUNT_EMAIL_VERIFICATION = 'optional'
+ACCOUNT_SIGNUP_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/'  # Redirect after login
+LOGOUT_REDIRECT_URL = '/'
+ACCOUNT_LOGOUT_ON_GET = True
+# Old (deprecated)
+# ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_REQUIRED = True
+# ACCOUNT_USERNAME_REQUIRED = False
+
+# New (recommended)
+ACCOUNT_LOGIN_METHODS = {"username", "email"}
+ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*", "password2*"]

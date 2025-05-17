@@ -76,16 +76,9 @@
   align-items: center;
   gap: 0.5rem;
 }
-/* 
-.glass-card .input-group input[type="email"] {
-  background: rgba(255,255,255,0.05) !important;
-  color: white !important;
-  border: 1px solid rgba(255,255,255,0.1) !important;
-  padding: 1rem !important;
-} */
 
 .input-group input {
-  width: 100%;
+  width: 93%;
   padding: 1rem;
   background: rgba(255,255,255,0.05);
   border: 1px solid rgba(255,255,255,0.1);
@@ -126,6 +119,8 @@
 }
 
 .auth-button.secondary {
+  width: 93%;
+  text-decoration: none;
   background: rgba(255,255,255,0.05);
   border: 1px solid rgba(255,255,255,0.1);
   color: white;

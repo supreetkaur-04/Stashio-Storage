@@ -31,12 +31,13 @@
       {% csrf_token %}
       
       <div class="input-group">
-        <label for="{{ form.email.id_for_label }}">
-          <i class="fas fa-envelope"></i>
-          Email Address
+        <label for="{{ form.login.id_for_label }}">
+          <i class="fas fa-user"></i>
+          Username Or Email
         </label>
-        {{ form.email }}
+        {{ form.login }}
       </div>
+
 
       <div class="input-group">
         <label for="id_password">
@@ -49,7 +50,11 @@
       <button type="submit" class="auth-button primary">
         <i class="fas fa-unlock"></i>
         Access Workspace
-      </button>
+      </button> 
+{% comment %} <pre>{{ form.fields.keys }}</pre> {% endcomment %}
+
+      {% comment %} {{ form.as_p }} {% endcomment %}
+
     </form>
 
     <div class="social-auth">
