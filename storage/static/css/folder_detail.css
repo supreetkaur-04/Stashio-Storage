@@ -1,0 +1,168 @@
+:root {
+  --primary: #2A9D8F;
+  --secondary: #1A2E35;
+  --accent: #E76F51;
+  --dark: #0F1A1C;
+  --text-light: rgba(255,255,255,0.9);
+  --glass-bg: rgba(16, 24, 32, 0.6);
+}
+
+.folder-container {
+  padding: 2rem;
+  background: linear-gradient(160deg, var(--dark) 0%, #0a1215 100%);
+  min-height: 100vh;
+  color: var(--text-light);
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+.glass-card {
+  background: var(--glass-bg);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 20px;
+  padding: 2.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.25);
+}
+
+.folder-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  position: relative;
+}
+
+.folder-header h1 {
+  font-size: 2.4rem;
+  margin-bottom: 1rem;
+}
+
+.back-link {
+  color: var(--primary);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  transition: opacity 0.3s ease;
+}
+
+.back-link:hover {
+  opacity: 0.8;
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.file-list, .subfolder-list {
+  background: rgba(255,255,255,0.03);
+  border-radius: 16px;
+  padding: 1.5rem;
+}
+
+.list-header {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.file-item, .folder-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  background: rgba(255,255,255,0.02);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.file-item:hover, .folder-item:hover {
+  background: rgba(255,255,255,0.05);
+  transform: translateX(5px);
+}
+
+.file-actions, .folder-actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.download-btn {
+  color: var(--primary);
+  padding: 0.5rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.download-btn:hover {
+  background: rgba(42, 157, 143, 0.1);
+}
+
+.delete-btn {
+  background: rgba(231, 111, 81, 0.1);
+  color: var(--accent);
+  border: none;
+  padding: 0.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.delete-btn:hover {
+  background: rgba(231, 111, 81, 0.2);
+}
+
+.upload-section {
+  margin-bottom: 3rem;
+}
+
+.alert {
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.alert-danger {
+  background: rgba(231, 111, 81, 0.1);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 2rem;
+  color: rgba(255,255,255,0.5);
+  font-style: italic;
+}
+
+@media (max-width: 768px) {
+  .content-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .glass-card {
+    padding: 1.5rem;
+  }
+  
+  .folder-header h1 {
+    font-size: 2rem;
+  }
+  
+  .file-item, .folder-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+}
+
+/* Add existing form styles from upload.css */
+.file-input, .custom-file-input, .btn-primary {
+  /* Include all relevant styles from previous upload.css */
+}

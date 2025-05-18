@@ -1,27 +1,51 @@
 {% extends "base.html" %}
+{% load static %}
 
-<!-- storage/templates/create_subfolder.html -->
-
-{% block content %}
-  <h1>Create Subfolder inside "{{ parent_folder.name }}"</h1>
-
-  <form method="POST">
-    {% csrf_token %}
-    <label for="name">Subfolder Name:</label>
-    <input type="text" name="name" id="name" required>
-    <button type="submit">Create Subfolder</button>
-  </form>
-
-  <br>
-  <a href="{% url 'storage:folder_detail' folder_id=parent_folder.id %}">Go back to folder</a>
-
-  {% if messages %}
-    <ul>
-      {% for message in messages %}
-        <li class="message">{{ message }}</li>
-      {% endfor %}
-    </ul>
-  {% endif %}
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'css/create_subfolder.css' %}">
 {% endblock %}
 
+{% block content %}
+<div class="subfolder-create-container">
+  <div class="glass-card">
+    <div class="header">
+      <h1>📁 Create Subfolder in "{{ parent_folder.name }}"</h1>
+      <a href="{% url 'storage:folder_detail' folder_id=parent_folder.id %}" class="back-link">
+        <i class="fas fa-arrow-left"></i>
+        Back to Folder
+      </a>
+    </div>
 
+    <form class="subfolder-form" method="POST">
+      {% csrf_token %}
+      
+      <div class="form-group">
+        <label for="name">Subfolder Name</label>
+        <input type="text" name="name" id="name" required class="form-input">
+        {% if form.errors %}
+        <div class="error-message">
+          <i class="fas fa-exclamation-circle"></i>
+          {{ form.errors.name.0 }}
+        </div>
+        {% endif %}
+      </div>
+
+      <button type="submit" class="btn btn-primary">
+        <i class="fas fa-folder-plus"></i>
+        Create Subfolder
+      </button>
+    </form>
+
+    {% if messages %}
+    <div class="message-container">
+      {% for message in messages %}
+      <div class="message {{ message.tags }}">
+        <i class="fas fa-info-circle"></i>
+        {{ message }}
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

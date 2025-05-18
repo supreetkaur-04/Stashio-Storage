@@ -1,60 +1,87 @@
 {% extends "base.html" %}
-
-{% load filters %}
-
-<!-- storage/templates/file_list.html -->
+{% load static %}
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'css/file_list.css' %}">
+{% endblock %}
 
 {% block content %}
-  <h1>Your Files and Folders</h1>
+<div class="storage-container">
+  <div class="dashboard-header">
+    <h1>Secure Cloud Storage</h1>
+    <p>End-to-end encrypted file management</p>
+  </div>
 
-  <h2>Total Storage Used: {{ storage_used|filesizeformat }}</h2>
+  <div class="storage-card">
+    <h2>📦 Storage Usage</h2>
+    <p><strong>Used:</strong> {{ storage.used|filesizeformat }} / {{ storage.max|filesizeformat }}</p>
+    <p><strong>Remaining:</strong> {{ storage.remaining|filesizeformat }}</p>
+    
+    <div class="progress-bar">
+      <div class="progress-fill" style="width: {{ storage.percent }}%;">
+        {{ storage.percent }}%
+      </div>
+    </div>
+  </div>
 
-  <!-- Add condition to prevent uploads if storage exceeds limit --> 
-  {% if storage_used|add:1 > MAX_STORAGE %}
-    <p>You have reached your storage limit. Please delete some files before uploading more.</p>
-  {% else %}
-    <a href="{% url 'storage:upload_file' %}">Upload a new file</a>
-  {% endif %}
+  <div class="action-buttons">
+    {% if storage.used >= storage.max %}
+      <div class="empty-state">Storage limit reached</div>
+    {% else %}
+      <a href="{% url 'storage:upload_file' %}" class="btn btn-primary">
+        <i class="fas fa-upload"></i>
+        Upload File
+      </a>
+    {% endif %}
+    <a href="{% url 'storage:create_folder' %}" class="btn btn-secondary">
+      <i class="fas fa-folder-plus"></i>
+      Create Folder
+    </a>
+  </div>
 
-  <a href="{% url 'storage:create_folder' %}">Create a new folder</a>
-
-  <h3>Folders:</h3>
-  <ul>
+  <div class="file-list">
+    <div class="list-header">
+      <h3>📁 Folders</h3>
+    </div>
     {% for folder in folders %}
-      <li>
-        <a href="{% url 'storage:folder_view' folder.id %}">{{ folder.name }}</a>
-        <a href="{% url 'storage:delete_folder' folder.id %}" onclick="return confirm('Are you sure you want to delete this folder?')">Delete</a>
-      </li>
+      <div class="file-item">
+        <div>
+          <i class="fas fa-folder"></i>
+          <a href="{% url 'storage:folder_view' folder.id %}">{{ folder.name }}</a>
+        </div>
+        <div class="file-actions">
+          <a href="{% url 'storage:delete_folder' folder.id %}" class="delete-btn">
+            Delete
+          </a>
+        </div>
+      </div>
     {% empty %}
-      <p>No folders found.</p>
+      <div class="empty-state">No folders found</div>
     {% endfor %}
-  </ul>
+  </div>
 
-  {% comment %} <h3>Subfolders:</h3>
-  <ul>
-    {% for subfolder in folder.subfolders %}
-      <li>
-        <a href="{% url 'storage:folder_view' subfolder.id %}">{{ subfolder.name }}</a>
-        <a href="{% url 'storage:delete_folder' subfolder.id %}" onclick="return confirm('Are you sure you want to delete this subfolder?')">Delete</a>
-      </li>
-    {% empty %}
-      <p>No subfolders.</p>
-    {% endfor %}
-  </ul> {% endcomment %}
-
-  <h3>Files:</h3>
-  <ul>
+  <div class="file-list">
+    <div class="list-header">
+      <h3>📄 Files</h3>
+    </div>
     {% for file in files %}
-      <li>
-        <a href="{% url 'storage:file_download' file.id %}">{{ file.name }}</a> 
-        ({{ file.size|filesizeformat }}) 
-        - <form action="{% url 'storage:delete_file' file.id %}" method="POST" style="display:inline;">
+      <div class="file-item">
+        <div>
+          <i class="fas fa-file"></i>
+          <a href="{% url 'storage:file_download' file.id %}">{{ file.name }}</a>
+          <span class="file-size">({{ file.size|filesizeformat }})</span>
+        </div>
+        <div class="file-actions">
+          <form action="{% url 'storage:delete_file' file.id %}" method="post">
             {% csrf_token %}
-            <button class="btn" type="submit" onclick="return confirm('Are you sure you want to delete this file?')">Delete</button>
+            <button type="submit" class="delete-btn" onclick="return confirm('Are you sure?')">
+              Delete
+            </button>
           </form>
-      </li>
+        </div>
+      </div>
     {% empty %}
-      <p>No files found.</p>
+      <div class="empty-state">No files found</div>
     {% endfor %}
-  </ul>
+  </div>
+</div>
 {% endblock %}

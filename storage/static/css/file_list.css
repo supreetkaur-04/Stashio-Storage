@@ -1,0 +1,253 @@
+/* storage/static/css/storage.css */
+:root {
+  --primary: #2A9D8F;
+  --secondary: #1A2E35;
+  --accent: #E76F51;
+  --dark: #0F1A1C;
+  --text-light: rgba(255,255,255,0.9);
+  --glass-bg: rgba(16, 24, 32, 0.6);
+}
+
+.storage-container {
+  padding: 2rem;
+  background: linear-gradient(160deg, var(--dark) 0%, #0a1215 100%);
+  min-height: 100vh;
+  color: var(--text-light);
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+.dashboard-header {
+  margin-bottom: 2.5rem;
+  text-align: center;
+  position: relative;
+  padding-bottom: 1.5rem;
+}
+
+.dashboard-header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 3px;
+  background: var(--primary);
+  border-radius: 2px;
+}
+
+.storage-card {
+  background: var(--glass-bg);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 20px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.25);
+  transition: transform 0.3s ease;
+}
+
+.storage-card:hover {
+  transform: translateY(-2px);
+}
+
+.progress-bar {
+  background: rgba(255,255,255,0.05);
+  border-radius: 12px;
+  height: 24px;
+  overflow: hidden;
+  margin: 1.5rem 0;
+  position: relative;
+}
+
+.progress-fill {
+  background: linear-gradient(135deg, var(--primary) 0%, #1A2E35 150%);
+  height: 100%;
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 12px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  position: relative;
+}
+
+.progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  opacity: 0.4;
+  animation: shimmer 2.5s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.action-buttons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  margin: 3rem 0;
+}
+
+.btn {
+  padding: 1.2rem 2rem;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  justify-content: center;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  backdrop-filter: blur(4px);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary) 0%, #1A2E35 100%);
+  color: white;
+  border: 1px solid rgba(42, 157, 143, 0.3);
+}
+
+.btn-secondary {
+  background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(16, 24, 32, 0.2) 100%);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: white;
+}
+
+.btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(42, 157, 143, 0.3);
+}
+
+.file-list {
+  margin-top: 3rem;
+  background: var(--glass-bg);
+  border-radius: 20px;
+  padding: 2rem;
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.list-header {
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.list-header h3 {
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.file-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.2rem;
+  background: rgba(255,255,255,0.03);
+  border-radius: 14px;
+  margin-bottom: 0.8rem;
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+}
+
+.file-item:hover {
+  background: rgba(255,255,255,0.05);
+  border-color: rgba(42, 157, 143, 0.2);
+  transform: translateX(8px);
+}
+
+.file-item a {
+  color: var(--text-light);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.file-item a:hover {
+  color: var(--primary);
+}
+
+.file-actions {
+  display: flex;
+  gap: 1.2rem;
+  align-items: center;
+}
+
+.delete-btn {
+  background: rgba(231, 111, 81, 0.1);
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.delete-btn:hover {
+  background: rgba(231, 111, 81, 0.2);
+  transform: scale(1.05);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem;
+  color: rgba(255,255,255,0.5);
+  font-style: italic;
+}
+
+.file-size {
+  color: rgba(255,255,255,0.6);
+  font-size: 0.9em;
+  margin-left: 0.8rem;
+}
+
+@media (max-width: 768px) {
+  .storage-container {
+    padding: 1.5rem;
+  }
+  
+  .file-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.2rem;
+    padding: 1.5rem;
+  }
+  
+  .btn {
+    padding: 1rem 1.5rem;
+    font-size: 0.95rem;
+  }
+  
+  .file-list {
+    padding: 1.5rem;
+  }
+}
+
+/* Modern scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--dark);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 4px;
+}

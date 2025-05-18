@@ -1,0 +1,256 @@
+/* folder.css */
+:root {
+  --primary: #2A9D8F;
+  --secondary: #1A2E35;
+  --accent: #E76F51;
+  --dark: #0F1A1C;
+  --text-light: rgba(255,255,255,0.9);
+  --glass-bg: rgba(16, 24, 32, 0.6);
+}
+
+.folder-container {
+  padding: 2rem;
+  background: linear-gradient(160deg, var(--dark) 0%, #0a1215 100%);
+  min-height: 100vh;
+  color: var(--text-light);
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+.glass-card {
+  background: var(--glass-bg);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 20px;
+  padding: 2.5rem;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.25);
+}
+
+.folder-header {
+  margin-bottom: 2rem;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.folder-title {
+  font-size: 2.4rem;
+  margin: 0;
+}
+
+.folder-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.auth-button {
+  padding: 1rem 1.8rem;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  text-decoration: none;
+}
+
+.auth-button.primary {
+  background: linear-gradient(135deg, var(--primary) 0%, #1A2E35 100%);
+  color: white;
+}
+
+.auth-button.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(42, 157, 143, 0.3);
+}
+
+.storage-indicator {
+  background: rgba(255,255,255,0.05);
+  border-radius: 12px;
+  padding: 1rem;
+  position: relative;
+}
+
+.progress-bar {
+  background: linear-gradient(135deg, var(--primary) 0%, #1A2E35 150%);
+  height: 8px;
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-bar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  animation: shimmer 2.5s infinite;
+}
+
+.storage-indicator span {
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.7);
+}
+
+.message-list {
+  margin: 2rem 0;
+}
+
+.message-alert {
+  padding: 1.2rem;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.message-alert.error {
+  background: rgba(231, 111, 81, 0.1);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+}
+
+.message-alert.success {
+  background: rgba(42, 157, 143, 0.1);
+  border: 1px solid var(--primary);
+  color: var(--primary);
+}
+
+.content-section {
+  margin: 3rem 0;
+}
+
+.section-title {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.item-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.folder-item, .file-item {
+  background: rgba(255,255,255,0.03);
+  border-radius: 14px;
+  padding: 1.2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+}
+
+.folder-item:hover, .file-item:hover {
+  background: rgba(255,255,255,0.05);
+  border-color: rgba(42, 157, 143, 0.2);
+  transform: translateX(8px);
+}
+
+.item-name {
+  color: var(--text-light);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  transition: color 0.3s ease;
+}
+
+.item-name:hover {
+  color: var(--primary);
+}
+
+.item-actions {
+  display: flex;
+  gap: 0.8rem;
+}
+
+.delete-btn {
+  background: rgba(231, 111, 81, 0.1);
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  padding: 0.6rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.delete-btn:hover {
+  background: rgba(231, 111, 81, 0.2);
+  transform: scale(1.1);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 2rem;
+  color: rgba(255,255,255,0.5);
+  font-style: italic;
+}
+
+.folder-footer {
+  margin-top: 3rem;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  padding-top: 2rem;
+  text-align: center;
+}
+
+.auth-link {
+  color: var(--primary);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  transition: opacity 0.3s ease;
+}
+
+.auth-link:hover {
+  opacity: 0.8;
+}
+
+@media (max-width: 768px) {
+  .glass-card {
+    padding: 1.5rem;
+    border-radius: 16px;
+  }
+  
+  .header-content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .folder-title {
+    font-size: 1.8rem;
+  }
+  
+  .auth-button {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .item-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}

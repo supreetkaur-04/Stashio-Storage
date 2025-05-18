@@ -1,61 +1,116 @@
 {% extends "base.html" %}
+{% load static %}
 
-{% comment %} templates/folder_view.html {% endcomment %}
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'css/folder_view.css' %}">
+{% endblock %}
 
 {% block content %}
-  <h1>{{ folder.name }}</h1>
+<div class="folder-container">
+  <div class="glass-card">
+    <div class="folder-header">
+      <div class="header-content">
+        <h1 class="folder-title">{{ folder.name }}</h1>
+        <div class="folder-actions">
+          <a href="{% url 'storage:create_subfolder' folder.id %}" class="auth-button primary">
+            <i class="fas fa-folder-plus"></i>
+            New Subfolder
+          </a>
+          {% if storage_used|add:1 > MAX_STORAGE %}
+            <div class="storage-warning">
+              <i class="fas fa-exclamation-triangle"></i>
+              Storage Full
+            </div>
+          {% else %}
+            <a href="{% url 'storage:upload_file_with_folder' folder.id %}" class="auth-button primary">
+              <i class="fas fa-upload"></i>
+              Upload File
+            </a>
+          {% endif %}
+        </div>
+      </div>
+      
+      {% comment %} <div class="storage-indicator">
+        <div class="progress-bar" style="width: {{ storage_percent }}%"></div>
+        <span>{{ storage_used|floatformat }}MB / {{ MAX_STORAGE }}MB used</span>
+      </div> {% endcomment %}
+    </div>
 
-  <a href="{% url 'storage:create_subfolder' folder.id %}">Create Subfolder</a>
-
-  <h3>Subfolders:</h3>
-  <ul>
-    {% for subfolder in folder.subfolders %}
-      <li>
-        <a href="{% url 'storage:folder_view' subfolder.id %}">{{ subfolder.name }}</a>
-        <a href="{% url 'storage:delete_folder' subfolder.id %}" onclick="return confirm('Are you sure you want to delete this subfolder?')">Delete</a>
-      </li>
-    {% empty %}
-      <p>No subfolders.</p>
-    {% endfor %}
-  </ul>
-
-  <h3>Files:</h3>
-  <ul>
-    {% for file in folder.files %}
-      <li>
-        <a href="{% url 'storage:file_download' file.id %}">{{ file.name }}</a>
-        <form action="{% url 'storage:delete_file' file.id %}" method="POST" style="display:inline;">
-          {% csrf_token %}
-          <button type="submit">Delete</button>
-        </form>
-      </li>
-    {% empty %}
-      <p>No files found.</p>
-    {% endfor %}
-  </ul>
-
-  {% comment %} <h3>Upload a File</h3>
-  <form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" name="upload_file">Upload File</button>
-  </form> {% endcomment %}
-
-  {% if storage_used|add:1 > MAX_STORAGE %}
-    <p>You have reached your storage limit. Please delete some files before uploading more.</p>
-  {% else %}
-    <a href="{% url 'storage:upload_file_with_folder' folder.id %}">Upload a new file</a>
-  {% endif %}
-
-
-  <br>
-  <a href="{% url 'storage:folder_list' %}">Go back to all folders</a>
-
-  {% if messages %}
-    <ul>
+    {% if messages %}
+    <div class="message-list">
       {% for message in messages %}
-        <li class="message">{{ message }}</li>
+        <div class="message-alert {{ message.tags }}">
+          <i class="fas fa-info-circle"></i>
+          {{ message }}
+        </div>
       {% endfor %}
-    </ul>
-  {% endif %}
+    </div>
+    {% endif %}
+
+    <div class="folder-content">
+      <div class="content-section">
+        <h3 class="section-title">
+          <i class="fas fa-folder-open"></i>
+          Subfolders
+        </h3>
+        
+        {% if folder.subfolders %}
+        <div class="item-grid">
+          {% for subfolder in folder.subfolders %}
+            <div class="folder-item">
+              <a href="{% url 'storage:folder_view' subfolder.id %}" class="item-name">
+                <i class="fas fa-folder"></i>
+                {{ subfolder.name }}
+              </a>
+              <div class="item-actions">
+                <a href="{% url 'storage:delete_folder' subfolder.id %}" class="delete-btn" 
+                   onclick="return confirm('Are you sure you want to delete this subfolder?')">
+                  <i class="fas fa-trash-alt"></i>
+                </a>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+        {% else %}
+          <p class="empty-state">No subfolders created</p>
+        {% endif %}
+      </div>
+
+      <div class="content-section">
+        <h3 class="section-title">
+          <i class="fas fa-file"></i>
+          Files
+        </h3>
+        
+        {% if folder.files %}
+        <div class="item-grid">
+          {% for file in folder.files %}
+            <div class="file-item">
+              <a href="{% url 'storage:file_download' file.id %}" class="item-name">
+                <i class="fas fa-file-download"></i>
+                {{ file.name }}
+              </a>
+              <form action="{% url 'storage:delete_file' file.id %}" method="POST" class="item-actions">
+                {% csrf_token %}
+                <button type="submit" class="delete-btn">
+                  <i class="fas fa-trash-alt"></i>
+                </button>
+              </form>
+            </div>
+          {% endfor %}
+        </div>
+        {% else %}
+          <p class="empty-state">No files uploaded</p>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="folder-footer">
+      <a href="{% url 'storage:file_list' %}" class="auth-link">
+        <i class="fas fa-arrow-left"></i>
+        Back to All Folders
+      </a>
+    </div>
+  </div>
+</div>
 {% endblock %}

@@ -1,43 +1,102 @@
 {% extends "base.html" %}
-
-{% comment %} templates/folder_detail.html {% endcomment %}
+{% load static %}
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'css/folder_detail.css' %}">
+{% endblock %}
 
 {% block content %}
-  <h1>Files in "{{ folder.name }}"</h1>
+<div class="folder-container">
+  <div class="glass-card">
+    <div class="folder-header">
+      <h1>📁 {{ folder.name }}</h1>
+      <a href="{% url 'storage:file_list' %}" class="back-link">
+        <i class="fas fa-arrow-left"></i>
+        Back to All Files
+      </a>
+    </div>
 
-  <h2>Upload a New File</h2>
-  <form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="hidden" name="folder_id" value="{{ folder.id }}">
-    <button type="submit" name="upload_file">Upload File</button>
-  </form>
+    <div class="storage-alert">
+      {% if storage_used|add:1 > MAX_STORAGE %}
+      <div class="alert alert-danger">
+        <i class="fas fa-exclamation-triangle"></i>
+        Storage limit reached - delete files to upload more
+      </div>
+      {% else %}
+      <div class="upload-section">
+        <h2>Upload New File</h2>
+        <form class="upload-form" method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+          <input type="hidden" name="folder_id" value="{{ folder.id }}">
+          
+          <div class="form-group">
+            <div class="file-input">
+              {{ form.file }}
+              <div class="custom-file-input">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <span class="file-text">Choose file or drag & drop</span>
+              </div>
+            </div>
+          </div>
 
-  {% if storage_used|add:1 > MAX_STORAGE %}
-    <p>You have reached your storage limit. Please delete some files before uploading more.</p>
-  {% else %}
-    <a href="{% url 'storage:upload_file' %}">Upload a new file</a>
-  {% endif %}
+          <button type="submit" class="btn btn-primary" name="upload_file">
+            <i class="fas fa-upload"></i>
+            Upload File
+          </button>
+        </form>
+      </div>
+      {% endif %}
+    </div>
 
+    <div class="content-grid">
+      <div class="file-list">
+        <div class="list-header">
+          <h2>📄 Files</h2>
+        </div>
+        {% for file in files %}
+        <div class="file-item">
+          <div>
+            <i class="fas fa-file"></i>
+            {{ file.name }}
+            <span class="file-size">({{ file.size|filesizeformat }})</span>
+          </div>
+          <div class="file-actions">
+            <a href="{% url 'storage:file_download' file.id %}" class="download-btn">
+              <i class="fas fa-download"></i>
+            </a>
+            <form action="{% url 'storage:delete_file' file.id %}" method="post">
+              {% csrf_token %}
+              <button type="submit" class="delete-btn" onclick="return confirm('Delete this file?')">
+                <i class="fas fa-trash"></i>
+              </button>
+            </form>
+          </div>
+        </div>
+        {% empty %}
+        <div class="empty-state">No files in this folder</div>
+        {% endfor %}
+      </div>
 
-  <h2>Files</h2>
-  <ul>
-    {% for file in files %}
-      <li>{{ file.name }}</li>
-    {% endfor %}
-  </ul>
-
-  <h2>Subfolders</h2>
-  {% comment %} <ul>
-    <li><a href="{% url 'storage:file_list' %}">Back to file list</a></li>
-  </ul> {% endcomment %}
-  <ul>
-    {% for subfolder in subfolders %}
-      <li><a href="{% url 'storage:folder_detail' subfolder.id %}">{{ subfolder.name }}</a></li>
-    {% endfor %}
-  </ul>
-
-  {% comment %} <p>
-    <a href="{% url 'storage:file_list' %}">Back to file list</a>
-  </p> {% endcomment %}
+      <div class="subfolder-list">
+        <div class="list-header">
+          <h2>📁 Subfolders</h2>
+        </div>
+        {% for subfolder in subfolders %}
+        <div class="folder-item">
+          <a href="{% url 'storage:folder_detail' subfolder.id %}">
+            <i class="fas fa-folder"></i>
+            {{ subfolder.name }}
+          </a>
+          <div class="folder-actions">
+            <a href="{% url 'storage:delete_folder' subfolder.id %}" class="delete-btn">
+              <i class="fas fa-trash"></i>
+            </a>
+          </div>
+        </div>
+        {% empty %}
+        <div class="empty-state">No subfolders</div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}

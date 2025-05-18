@@ -1,0 +1,10 @@
+<div class="card">
+    <h2>📦 Storage Usage</h2>
+    <p><strong>Used:</strong> {{ storage.used|filesizeformat }} / {{ storage.max|filesizeformat }}</p>
+    <p><strong>Remaining:</strong> {{ storage.remaining|filesizeformat }}</p>
+    <div style="background: #eee; border-radius: 5px; overflow: hidden;">
+        <div style="width: {{ storage.percent }}%; background: #4caf50; padding: 4px; color: white;">
+            {{ storage.percent }}%
+        </div>
+    </div>
+</div>

@@ -1,32 +1,40 @@
 {% extends "base.html" %}
 {% load static %}  
 
-{% comment %} templates/folder_create.html {% endcomment %}
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'css/folder_create.css' %}">
+{% endblock %}
 
 {% block content %}
-<div class="container">
-    <h1>Create a New Folder</h1>
-    
-    <form method="post">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="id_name">Folder Name:</label>
-            {{ form.folder_name }}  <!-- Corrected field name -->
-            {% if form.name.errors %}
-                <ul class="error-list">
-                    {% for error in form.name.errors %}
-                        <li>{{ error }}</li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
-        </div>
-        <div class="form-group">
-            <button type="submit" class="btn btn-primary">Create Folder</button>
-        </div>
-    </form>
+<div class="folder-create-container">
+  <div class="glass-card">
+    <div class="header">
+      <h1>📂 Create New Folder</h1>
+      <a href="{% url 'storage:file_list' %}" class="back-link">
+        <i class="fas fa-arrow-left"></i>
+        Back to Files
+      </a>
+    </div>
 
-    <p>
-        <a href="{% url 'storage:file_list' %}">Back to file list</a>
-    </p>
+    <form class="folder-form" method="post">
+      {% csrf_token %}
+      
+      <div class="form-group">
+        <label for="id_name">Folder Name</label>
+        {{ form.folder_name }}
+        {% if form.name.errors %}
+        <div class="error-message">
+          <i class="fas fa-exclamation-circle"></i>
+          {{ form.name.errors.0 }}
+        </div>
+        {% endif %}
+      </div>
+
+      <button type="submit" class="btn btn-primary">
+        <i class="fas fa-folder-plus"></i>
+        Create Folder
+      </button>
+    </form>
+  </div>
 </div>
 {% endblock %}

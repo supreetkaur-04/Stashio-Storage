@@ -160,3 +160,5 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
+
+MAX_STORAGE_LIMIT = 10 *1024 * 1024 * 1024 

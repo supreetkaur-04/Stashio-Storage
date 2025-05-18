@@ -7,10 +7,15 @@ from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseForbidden, FileResponse         # (this file response)
 from .forms import FileUploadForm, FolderCreateForm, CustomUserCreationForm
-from .models import Folder, File, get_user_storage_usage
+from .models import Folder, File, get_user_storage_usage, get_user_storage_info,  MAX_STORAGE_LIMIT
 from .forms import CustomLoginForm
-from .forms import UsernameOrEmailLoginForm
+from django.conf import settings
 
+
+@login_required
+def dashboard(request):
+    storage_info = get_user_storage_info(request.user)
+    return render(request, 'dashboard.html', {'storage': storage_info})
 
 def home(request):
     return render(request, 'home.html')
@@ -71,29 +76,67 @@ def logout_view(request):
     return redirect('storage:login')  
 
 
+# @login_required
+# def upload_file(request, folder_id=None):
+#     if folder_id:
+#         folder = get_object_or_404(Folder, id=folder_id, user=request.user)
+#     else:
+#         folder = None  
+#     if request.method == 'POST':
+#         form = FileUploadForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             file = form.save(commit=False)
+#             file.user = request.user
+#             if folder:
+#                 file.folder = folder 
+#             file.save()
+#             messages.success(request, "File uploaded successfully!")
+#             if folder:
+#                 return redirect('storage:folder_detail', folder_id=folder.id)
+#             else:
+#                 return redirect('storage:file_list') 
+#         else:
+#             messages.error(request, "Error uploading the file.")
+#     else:
+#         form = FileUploadForm()
+#     return render(request, 'upload_file.html', {'folder': folder, 'form': form})
+
 @login_required
 def upload_file(request, folder_id=None):
     if folder_id:
         folder = get_object_or_404(Folder, id=folder_id, user=request.user)
     else:
-        folder = None  
+        folder = None
+
     if request.method == 'POST':
         form = FileUploadForm(request.POST, request.FILES)
         if form.is_valid():
+            uploaded_file = request.FILES['file']
+            
+            # Get total used storage by this user
+            user_files = File.objects.filter(user=request.user)
+            used_storage = sum(f.file.size for f in user_files)
+            
+            if used_storage + uploaded_file.size > settings.MAX_STORAGE_LIMIT:
+                messages.error(request, "❌ Storage limit exceeded. Cannot upload this file.")
+                return redirect('storage:file_list')  # or reload the form page
+            
+            # Save the file if within limit
             file = form.save(commit=False)
             file.user = request.user
             if folder:
-                file.folder = folder 
+                file.folder = folder
             file.save()
-            messages.success(request, "File uploaded successfully!")
+            messages.success(request, "✅ File uploaded successfully!")
             if folder:
                 return redirect('storage:folder_detail', folder_id=folder.id)
             else:
-                return redirect('storage:file_list') 
+                return redirect('storage:file_list')
         else:
-            messages.error(request, "Error uploading the file.")
+            messages.error(request, "❌ Error uploading the file.")
     else:
         form = FileUploadForm()
+        
     return render(request, 'upload_file.html', {'folder': folder, 'form': form})
 
 
@@ -121,22 +164,38 @@ def file_download(request, file_id):
         return redirect('storage:file_list')
 
 
+# @login_required
+# def file_list(request):
+#     query = request.GET.get('q', '')
+#     files = File.objects.filter(user=request.user, folder__isnull=True, name__icontains=query)  
+#     folders = Folder.objects.filter(user=request.user, parent__isnull=True, name__icontains=query)  
+#     storage_used = get_user_storage_usage(request.user)
+#     storage_limit = 100 * 1024 * 1024  
+#     storage_remaining = storage_limit - storage_used
+#     return render(request, 'file_list.html', {
+#         'files': files,
+#         'folders': folders,
+#         'query': query,
+#         'storage_used': storage_used,
+#         'storage_remaining': storage_remaining
+#     })
+
 @login_required
 def file_list(request):
-    query = request.GET.get('q', '')
-    files = File.objects.filter(user=request.user, folder__isnull=True, name__icontains=query)  
-    folders = Folder.objects.filter(user=request.user, parent__isnull=True, name__icontains=query)  
-    storage_used = get_user_storage_usage(request.user)
-    storage_limit = 100 * 1024 * 1024  
-    storage_remaining = storage_limit - storage_used
-    return render(request, 'file_list.html', {
+    # 1. Fetch files & folders
+    files = File.objects.filter(user=request.user, folder__isnull=True)
+    folders = Folder.objects.filter(user=request.user, parent__isnull=True)
+
+    # 2. Get all storage info at once
+    storage = get_user_storage_info(request.user)
+
+    context = {
         'files': files,
         'folders': folders,
-        'query': query,
-        'storage_used': storage_used,
-        'storage_remaining': storage_remaining
-    })
-
+        'storage': storage,
+        'MAX_STORAGE': MAX_STORAGE_LIMIT,
+    }
+    return render(request, 'file_list.html', context)
 
 @login_required
 def create_folder(request):
@@ -233,7 +292,16 @@ def folder_detail(request, folder_id):
 @login_required
 def folder_list(request):
     folders = Folder.objects.filter(user=request.user)
-    return render(request, 'folder_list.html', {
+    storage_used = float(get_user_storage_usage(request.user))
+    storage_limit = 100 * 1024 * 1024  # 100MB in bytes
+    storage_percent = min((storage_used / storage_limit) * 100, 100)
+    files = File.objects.filter(user=request.user)
+
+    return render(request, 'file_list.html', {
+        'files': files,
         'folders': folders,
+        'storage_used': storage_used,
+        'storage_percent': storage_percent,
+        'MAX_STORAGE': storage_limit
     })
     

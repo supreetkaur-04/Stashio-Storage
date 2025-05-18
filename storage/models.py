@@ -9,9 +9,10 @@ from .utils import validate_file
 ALLOWED_EXTENSIONS = ['pdf', 'jpg', 'jpeg', 'png', 'txt', 'doc', 'docx', 'xls', 'xlsx']
 
 class File(models.Model):
-    name = models.CharField(max_length=255)
+    # name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, blank=True) 
     file = models.FileField(upload_to='files/')
-    size = models.IntegerField(null=False) 
+    size = models.BigIntegerField(null=False) 
     uploaded_at = models.DateTimeField(auto_now_add=True)
     folder = models.ForeignKey('Folder', null=True, blank=True, on_delete=models.SET_NULL)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -35,6 +36,23 @@ class File(models.Model):
 def get_user_storage_usage(user):
     total_storage = File.objects.filter(user=user).aggregate(Sum('size'))['size__sum'] or 0
     return total_storage
+
+from django.db.models import Sum
+
+def get_user_storage_info(user):
+    total_used = File.objects.filter(user=user).aggregate(Sum('size'))['size__sum'] or 0
+    max_limit = 10 * 1024 * 1024 * 1024  # 10 GB
+    remaining = max_limit - total_used
+    percent_used = round((total_used / max_limit) * 100, 2) if max_limit else 0
+    return {
+        'used': total_used,
+        'remaining': max(0, remaining),
+        'percent': min(100, percent_used),
+        'max': max_limit
+    }
+
+
+MAX_STORAGE_LIMIT = 10 *1024 * 1024 * 1024 
 
 
 class Folder(models.Model):

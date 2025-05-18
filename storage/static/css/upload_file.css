@@ -1,0 +1,227 @@
+/* upload.css */
+:root {
+  --primary: #2A9D8F;
+  --secondary: #1A2E35;
+  --accent: #E76F51;
+  --dark: #0F1A1C;
+  --text-light: rgba(255,255,255,0.9);
+  --glass-bg: rgba(16, 24, 32, 0.6);
+}
+
+.upload-container {
+  padding: 2rem;
+  background: linear-gradient(160deg, var(--dark) 0%, #0a1215 100%);
+  min-height: 100vh;
+  color: var(--text-light);
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+.glass-card {
+  background: var(--glass-bg);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 20px;
+  padding: 2.5rem;
+  max-width: 600px;
+  margin: 0 auto;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.25);
+}
+
+.upload-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.upload-header h1 {
+  font-size: 2.2rem;
+  margin-bottom: 1rem;
+}
+
+.breadcrumbs {
+  margin-bottom: 2rem;
+}
+
+.back-link {
+  color: var(--primary);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  transition: opacity 0.3s ease;
+}
+
+.back-link:hover {
+  opacity: 0.8;
+}
+
+.upload-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.8rem;
+  font-weight: 500;
+  color: var(--primary);
+}
+
+.file-input {
+  position: relative;
+  overflow: hidden;
+}
+
+.custom-file-input {
+  background: rgba(255,255,255,0.03);
+  border: 2px dashed rgba(255,255,255,0.1);
+  border-radius: 16px;
+  padding: 3rem 2rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.custom-file-input:hover {
+  border-color: var(--primary);
+  background: rgba(42, 157, 143, 0.05);
+}
+
+.file-text {
+  display: block;
+  font-size: 1.1rem;
+  margin: 0.8rem 0;
+}
+
+.file-size {
+  color: rgba(255,255,255,0.6);
+  font-size: 0.9rem;
+}
+
+input[type="file"] {
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+select {
+  width: 100%;
+  padding: 1rem;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  color: var(--text-light);
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(42, 157, 143, 0.2);
+}
+
+.btn {
+  padding: 1.2rem 2rem;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  justify-content: center;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  backdrop-filter: blur(4px);
+  width: 100%;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary) 0%, #1A2E35 100%);
+  color: white;
+  border: 1px solid rgba(42, 157, 143, 0.3);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(42, 157, 143, 0.3);
+}
+
+.message-container {
+  margin-top: 2rem;
+}
+
+.message {
+  padding: 1.2rem;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: rgba(231, 111, 81, 0.1);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+}
+
+.message.success {
+  background: rgba(42, 157, 143, 0.1);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+@media (max-width: 768px) {
+  .glass-card {
+    padding: 1.5rem;
+    border-radius: 16px;
+  }
+  
+  .upload-header h1 {
+    font-size: 1.8rem;
+  }
+  
+  .btn {
+    padding: 1rem 1.5rem;
+  }
+  
+  .custom-file-input {
+    padding: 2rem 1rem;
+  }
+}
+
+/* Add text input styling */
+input[type="text"] {
+  width: 100%;
+  padding: 1rem;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  color: var(--text-light);
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+input[type="text"]:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(42, 157, 143, 0.2);
+}
+
+/* Add spacing between form elements */
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+/* Style the filename input container */
+.file-name-input {
+  margin-bottom: 1.5rem;
+}

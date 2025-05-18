@@ -1,32 +1,64 @@
 {% extends "base.html" %}
-
-<!-- storage/templates/upload_file.html -->
+{% load static %}
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'css/upload_file.css' %}">
+{% endblock %}
 
 {% block content %}
-  <h1>Upload a File to {% if folder %} "{{ folder.name }}" {% else %} "Root" {% endif %}</h1>
+<div class="upload-container">
+  <div class="glass-card">
+    <div class="upload-header">
+      <h1>📤 Upload to {% if folder %}"{{ folder.name }}"{% else %}Root{% endif %}</h1>
+      <div class="breadcrumbs">
+        <a href="{% if folder %}{% url 'storage:folder_detail' folder_id=folder.id %}{% else %}{% url 'storage:folder_list' %}{% endif %}" class="back-link">
+          <i class="fas fa-arrow-left"></i>
+          Back to Folder
+        </a>
+      </div>
+    </div>
 
-  <!-- Add this link above the form -->
-  {% if folder %}
-    <a href="{% url 'storage:upload_file_with_folder' folder_id=folder.id %}">Upload File</a>
-  {% else %}
-    <a href="{% url 'storage:upload_file' %}">Upload File</a>
-  {% endif %}
-  
-  <!-- The form for file upload -->
-  <form action="{% if folder %}{% url 'storage:upload_file' folder_id=folder.id %}{% else %}{% url 'storage:upload_file' %}{% endif %}" method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Upload File</button>
-  </form>
+    <form class="upload-form" method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      
+      <!-- Added File Name Field -->
+      <div class="form-group">
+        <label for="id_name">File Name</label>
+        {{ form.name }}
+      </div>
 
-  <br>
-  <a href="{% if folder %}{% url 'storage:folder_detail' folder_id=folder.id %}{% else %}{% url 'storage:folder_list' %}{% endif %}">Go back to folder</a>
+      <div class="form-group">
+        <label for="id_file">Select File</label>
+        <div class="file-input">
+          {{ form.file }}
+          <div class="custom-file-input">
+            <i class="fas fa-cloud-upload-alt"></i>
+            <span class="file-text">Choose a file or drag & drop</span>
+            <span class="file-size">Max 2GB</span>
+          </div>
+        </div>
+      </div>
 
-  {% if messages %}
-    <ul>
+      <div class="form-group">
+        <label for="id_folder">Destination Folder</label>
+        {{ form.folder }}
+      </div>
+
+      <button type="submit" class="btn btn-primary">
+        <i class="fas fa-upload"></i>
+        Upload File
+      </button>
+    </form>
+
+    {% if messages %}
+    <div class="message-container">
       {% for message in messages %}
-        <li class="message">{{ message }}</li>
+      <div class="message {{ message.tags }}">
+        <i class="fas fa-info-circle"></i>
+        {{ message }}
+      </div>
       {% endfor %}
-    </ul>
-  {% endif %}
+    </div>
+    {% endif %}
+  </div>
+</div>
 {% endblock %}
