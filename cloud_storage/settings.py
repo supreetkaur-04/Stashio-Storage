@@ -162,3 +162,7 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 MAX_STORAGE_LIMIT = 10 *1024 * 1024 * 1024 
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://stashio-storage.onrender.com'
+]
