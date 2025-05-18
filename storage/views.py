@@ -49,7 +49,8 @@ def signup(request):
             user = form.save(commit=False)
             user.email = form.cleaned_data.get("email")
             user.save()
-            login(request, user)
+            # login(request, user)
+            login(request, user, backend='django.contrib.auth.backends.ModelBackend')
             messages.success(request, 'Your account has been created successfully!')
             return redirect('storage:home')
     else:
@@ -140,16 +141,31 @@ def upload_file(request, folder_id=None):
     return render(request, 'upload_file.html', {'folder': folder, 'form': form})
 
 
+from django.shortcuts import get_object_or_404, redirect
+from django.http import HttpResponseForbidden
+from django.contrib import messages
+
+@login_required
 def delete_file(request, file_id):
     file = get_object_or_404(File, id=file_id)
+    # Remember the parent folder before deleting
+    parent_folder = file.folder  
+
     if file.user != request.user:
         return HttpResponseForbidden("You are not authorized to delete this file.")
+
     try:
         file.delete()
         messages.success(request, 'File deleted successfully!')
     except Exception as e:
         messages.error(request, f"Error deleting file: {e}")
-    return redirect('storage:file_list') 
+
+    # Redirect back to the parent folder’s detail view
+    if parent_folder:
+        return redirect('storage:folder_detail', folder_id=parent_folder.id)
+    else:
+        # If it was in the root, send them back to the top-level file list
+        return redirect('storage:file_list')
 
 
 def file_download(request, file_id):
@@ -220,16 +236,25 @@ def folder_view(request, folder_id):
     subfolders = Folder.objects.filter(parent=folder)
     return render(request, 'folder_view.html', {'folder': folder, 'files': files, 'subfolders': subfolders})
 
-
+@login_required
 def delete_folder(request, folder_id):
     folder = get_object_or_404(Folder, id=folder_id)
+    # Remember the parent folder before deleting this one
+    parent_folder = folder.parent
+
+    # Prevent deletion if not empty
     if folder.files.count() > 0 or folder.subfolders.count() > 0:
         messages.error(request, "Cannot delete folder because it is not empty.")
         return redirect('storage:folder_view', folder_id=folder.id)
+
     folder.delete()
     messages.success(request, f"Folder '{folder.name}' has been deleted successfully.")
-    return redirect('storage:file_list')
 
+    # Redirect back to parent folder, or to root file list if none
+    if parent_folder:
+        return redirect('storage:folder_detail', folder_id=parent_folder.id)
+    else:
+        return redirect('storage:file_list')
 
 def upload_file_with_folder(request, folder_id):
     folder = get_object_or_404(Folder, id=folder_id)
@@ -238,8 +263,9 @@ def upload_file_with_folder(request, folder_id):
         if form.is_valid():
             uploaded_file = form.save(commit=False)
             uploaded_file.folder = folder
+            uploaded_file.user = request.user 
             uploaded_file.save()
-            return redirect('folder_detail', folder_id=folder.id)
+            return redirect('storage:folder_detail', folder_id=folder.id)
     else:
         form = FileUploadForm()
     return render(request, 'upload_file.html', {
